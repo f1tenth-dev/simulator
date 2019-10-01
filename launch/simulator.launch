@@ -1,0 +1,78 @@
+<?xml version='1.0'?>
+
+<launch>
+
+  <!-- agent properties -->
+  <arg         name           = 'car_name'
+               default        = 'car_1'/>
+  <arg         name           = 'x_pos'
+               default        = '2.5'/>
+  <arg         name           = 'y_pos'
+               default        = '-7.0'/>
+  <arg         name           = 'z_pos'
+               default        = '0.05'/>
+  <arg         name           = 'run_gazebo'
+               default        = 'false'/>
+  <arg         name           = 'paint'
+               default        = 'Yellow'/>
+  <arg         name           = 'remote_control'
+               default        = 'false'/>
+
+  <!-- run gazebo by default only once -->
+  <group       if             = '$(arg run_gazebo)'>
+
+  <!-- global parameters -->
+  <param       name           = 'use_sim_time'
+               value          = 'true'/>
+
+  <!-- simulator arguments -->
+  <arg         name           = 'world_name'
+               default        = 'race_track'/>
+  <arg         name           = 'gui'
+               default        = 'true'/>
+  <arg         name           = 'run_camera'
+               default        = 'false'/>
+
+  <!-- launch map to  odom tf -->
+  <node        name           = 'map_world_link'
+               pkg            = 'tf'
+               type           = 'static_transform_publisher'
+               args           = '0.0 0.0 0.0
+                                 0.0 0.0 0.0
+                                 map
+                                 odom
+                                 100'/>
+
+  <!-- launch gazebo with track -->
+  <include     file           = '$(find gazebo_ros)/launch/empty_world.launch'>
+  <arg         name           = 'world_name'
+               value          = '$(find f1tenth-sim)/world/$(arg world_name).world'/>
+  <arg         name           = 'gui'
+               value          = '$(arg gui)'/> </include> </group>
+
+  <!-- check if remote control is required -->
+  <group       if             = '$(arg remote_control)'>
+  <node        name           = 'joy_plugin'
+               pkg            = 'joy'
+               type           = 'joy_node'>
+  <param       name           = 'autorepeat_rate'
+               value          = '20.0'/> </node>
+  <node        name           = 'remote_control'
+               pkg            = 'f1tenth-sim'
+               type           = 'remote_control.py'
+               args           = '$(arg car_name)'/> </group>
+
+  <!-- spawn car using the set global parameters -->
+  <include     file           = '$(find f1tenth-sim)/config/vehicle_class.launch.xml'>
+  <arg         name           = 'car_name'
+               value          = '$(arg car_name)'/>
+  <arg         name           = 'x_pos'
+               value          = '$(arg x_pos)'/>
+  <arg         name           = 'y_pos'
+               value          = '$(arg y_pos)'/>
+  <arg         name           = 'z_pos'
+               value          = '$(arg z_pos)'/>
+  <arg         name           = 'paint'
+               value          = '$(arg paint)'/> </include>
+
+</launch>

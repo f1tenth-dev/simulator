@@ -1,0 +1,146 @@
+global_costmap:
+  global_frame: map
+  # robot_base_frame: base_link
+  update_frequency: 1.0
+  publish_frequency: 0.5
+  static_map: true
+
+  transform_tolerance: 0.5
+  plugins:
+    - {name: static_layer,            type: 'costmap_2d::StaticLayer'}
+    - {name: obstacle_layer,          type: 'costmap_2d::VoxelLayer'}
+    - {name: inflation_layer,         type: 'costmap_2d::InflationLayer'}
+
+  footprint: [ [-0.1, -0.2], [0.5, -0.2], [0.6, 0.0], [0.5, 0.2], [-0.1 ,0.2] ]
+  transform_tolerance: 0.2
+  map_type: costmap
+
+  obstacle_layer:
+   enabled: true
+   obstacle_range: 3.0
+   raytrace_range: 3.5
+   inflation_radius: 0.2
+   track_unknown_space: false
+   combination_method: 1
+
+   observation_sources: laser_scan_sensor
+   laser_scan_sensor: {data_type: LaserScan, marking: true, clearing: true}
+
+  inflation_layer:
+    enabled:              true
+    cost_scaling_factor:  10.0
+    inflation_radius:     0.5
+
+  static_layer:
+    enabled:              true
+    map_topic:            'map'
+
+local_costmap:
+  global_frame: map
+  # robot_base_frame: base_link
+  update_frequency: 5.0
+  publish_frequency: 2.0
+  static_map: false
+  rolling_window: true
+  width: 7.0
+  height: 7.0
+  resolution: 0.1
+  transform_tolerance: 0.5
+
+  plugins:
+   - {name: static_layer,        type: 'costmap_2d::StaticLayer'}
+   - {name: obstacle_layer,      type: 'costmap_2d::ObstacleLayer'}
+
+  footprint: [ [-0.1, -0.2], [0.5, -0.2], [0.6, 0.0], [0.5, 0.2], [-0.1 ,0.2] ]
+  transform_tolerance: 0.2
+  map_type: costmap
+
+  obstacle_layer:
+   enabled: true
+   obstacle_range: 3.0
+   raytrace_range: 3.5
+   inflation_radius: 0.2
+   track_unknown_space: false
+   combination_method: 1
+
+   observation_sources: laser_scan_sensor
+   laser_scan_sensor: {data_type: LaserScan, marking: true, clearing: true}
+
+  inflation_layer:
+    enabled:              true
+    cost_scaling_factor:  10.0
+    inflation_radius:     0.5
+
+  static_layer:
+    enabled:              true
+    map_topic:            'map'
+
+TebLocalPlannerROS:
+ # odom_topic: odom
+ map_frame: map
+
+ teb_autosize: True
+ dt_ref: 0.8
+ dt_hysteresis: 0.1
+ global_plan_overwrite_orientation: True
+ allow_init_with_backwards_motion: True
+ max_global_plan_lookahead_dist: 3.0
+ feasibility_check_no_poses: 2
+
+ max_vel_x: 1.0
+ max_vel_x_backwards: 1.0
+ max_vel_y: 0.0
+ max_vel_theta: 1.0
+ acc_lim_x: 0.125
+ acc_lim_theta: 0.5
+
+ min_turning_radius: 1.5
+ wheelbase: 0.315
+ cmd_angle_instead_rotvel: False
+
+ footprint_model:
+   type: 'polygon'
+   vertices: [ [-0.1, -0.2], [0.5, -0.2], [0.6, 0.0], [0.5, 0.2], [-0.1 ,0.2] ]
+
+ xy_goal_tolerance: 1.0
+ yaw_goal_tolerance: 1.57
+ free_goal_vel: False
+
+ min_obstacle_dist: 0.25
+ include_costmap_obstacles: True
+ costmap_obstacles_behind_robot_dist: 1.0
+ obstacle_poses_affected: 30
+ costmap_converter_plugin: ''
+ costmap_converter_spin_thread: True
+ costmap_converter_rate: 5
+
+ no_inner_iterations: 5
+ no_outer_iterations: 4
+ optimization_activate: True
+ optimization_verbose: False
+ penalty_epsilon: 0.1
+ weight_max_vel_x: 2
+ weight_max_vel_theta: 1
+ weight_acc_lim_x: 1
+ weight_acc_lim_theta: 1
+ weight_kinematics_nh: 1000
+ weight_kinematics_forward_drive: 1000
+ weight_kinematics_turning_radius: 1
+ weight_optimaltime: 1
+ weight_obstacle: 50
+ weight_dynamic_obstacle: 10
+
+ enable_homotopy_class_planning: True
+ enable_multithreading: True
+ simple_exploration: False
+ max_number_classes: 1 # 4
+ selection_cost_hysteresis: 1.0
+ selection_obst_cost_scale: 1.0
+ selection_alternative_time_cost: False
+ roadmap_graph_no_samples: 15
+ roadmap_graph_area_width: 5
+ h_signature_prescaler: 0.5
+ h_signature_threshold: 0.1
+ obstacle_keypoint_offset: 0.1
+ obstacle_heading_threshold: 0.45
+ visualize_hc_graph: False

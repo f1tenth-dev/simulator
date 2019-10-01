@@ -1,0 +1,96 @@
+<?xml version='1.0'?>
+
+<launch>
+
+  <!-- global parameters -->
+  <param       name           = 'use_sim_time'
+               value          = 'true'/>
+  <arg         name           = 'car_name'
+               default        = 'car_1'/>
+  <arg         name           = 'car_paint'
+               default        = 'Yellow'/>
+  <arg         name           = 'run_gazebo'
+               default        = 'true'/>
+  <arg         name           = 'x_pos'
+               default        = '2.5'/>
+  <arg         name           = 'y_pos'
+               default        = '-7.0'/>
+  <arg         name           = 'run_rviz'
+               default        = 'true'/>
+  <arg         name           = 'run_map'
+               default        = 'true'/>
+
+  <group       if             = '$(arg run_map)'>
+  <!-- map server -->
+  <node        name           = 'map_server'
+               pkg            = 'map_server'
+               type           = 'map_server'
+               args           = '$(find f1tenth-sim)/map/race_track.yaml'
+               output         = 'screen'>
+  <param       name           = 'frame_id'
+               value          = 'map'/> </node> </group>
+  <remap       from           = 'map'
+               to             = '/map'/>
+
+  <!-- spawn car using the set global parameters -->
+  <include     file           = '$(find f1tenth-sim)/launch/simulator.launch'>
+  <arg         name           = 'car_name'
+               value          = '$(arg car_name)'/>
+  <arg         name           = 'paint'
+               value          = '$(arg car_paint)'/>
+  <arg         name           = 'run_gazebo'
+               value          = '$(arg run_gazebo)'/>
+  <arg         name           = 'x_pos'
+               value          = '$(arg x_pos)'/>
+  <arg         name           = 'y_pos'
+               value          = '$(arg y_pos)'/> </include>
+
+  <group       ns             = '$(arg car_name)'>
+
+  <!-- geometry_msgs/Twist to ackermann_msgs/AckermannDrive -->
+  <node        name           = 'twist_ackermann_node'
+               pkg            = 'f1tenth-sim'
+               type           = 'twist_ackermann.py'
+               args           = '$(arg car_name)'/>
+
+  <!-- navigation -->
+  <node        pkg            = 'move_base'
+               type           = 'move_base'
+               respawn        = 'false'
+               name           = 'move_base'
+               output         = 'screen'>
+  <rosparam    file           = '$(find f1tenth-sim)/config/navigation.yaml'
+               command        = 'load'/>
+  <param       name           = 'global_costmap/robot_base_frame'
+               value          = '$(arg car_name)_base_link'/>
+  <param       name           = 'local_costmap/robot_base_frame'
+               value          = '$(arg car_name)_base_link'/>
+  <param       name           = 'global_costmap/obstacle_layer/laser_scan_sensor/topic'
+               value          = '$(arg car_name)/scan'/>
+  <param       name           = 'local_costmap/obstacle_layer/laser_scan_sensor/topic'
+               value          = '$(arg car_name)/scan'/>
+  <param       name           = 'TebLocalPlannerROS/odom_topic'
+               value          = '/$(arg car_name)/base/odom'/>
+  <param       name           = 'base_global_planner'
+               value          = 'global_planner/GlobalPlanner'/>
+  <param       name           = 'planner_frequency'
+               value          = '1.0'/>
+  <param       name           = 'planner_patience'
+               value          = '5.0'/>
+  <param       name           = 'base_local_planner'
+               value          = 'teb_local_planner/TebLocalPlannerROS'/>
+  <param       name           = 'controller_frequency'
+               value          = '20.0'/>
+  <param       name           = 'controller_patience'
+               value          = '15.0'/>
+  <param       name           = 'clearing_rotation_allowed'
+               value          = 'false'/> </node> </group>
+
+  <!-- launch rviz with navigation configuration -->
+  <group       if             = '$(arg run_rviz)'>
+  <node        pkg            = 'rviz'
+               type           = 'rviz'
+               name           = 'rviz'
+               args           = '-d $(find f1tenth-sim)/rviz/navigation.rviz'/> </group>
+
+</launch>

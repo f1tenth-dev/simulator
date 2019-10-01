@@ -1,0 +1,85 @@
+<?xml version='1.0'?>
+
+<launch>
+
+  <!-- global launch arguments -->
+  <arg         name           = 'car_name'
+               default        = 'car_1'/>
+  <arg         name           = 'x_pos'
+               default        = '2.5'/>
+  <arg         name           = 'y_pos'
+               default        = '-7.0'/>
+  <arg         name           = 'z_pos'
+               default        = '0.05'/>
+  <arg         name           = 'paint'
+               default        = 'Blue'/>
+
+  <!-- load joint controller configurations from YAML file to parameter server -->
+  <group       ns             = '$(arg car_name)'>
+  <rosparam    file           = '$(find f1tenth-sim)/config/control.yaml'
+               command        = 'load'/> </group>
+
+  <!-- load unique controller parameters -->
+  <param       name           = '/$(arg car_name)/left_front_wheel_velocity_controller/joint'
+               value          = '$(arg car_name)_left_front_wheel_joint'/>
+  <param       name           = '/$(arg car_name)/right_front_wheel_velocity_controller/joint'
+               value          = '$(arg car_name)_right_front_wheel_joint'/>
+  <param       name           = '/$(arg car_name)/left_rear_wheel_velocity_controller/joint'
+               value          = '$(arg car_name)_left_rear_wheel_joint'/>
+  <param       name           = '/$(arg car_name)/right_rear_wheel_velocity_controller/joint'
+               value          = '$(arg car_name)_right_rear_wheel_joint'/>
+  <param       name           = '/$(arg car_name)/left_steering_hinge_position_controller/joint'
+               value          = '$(arg car_name)_left_steering_hinge_joint'/>
+  <param       name           = '/$(arg car_name)/right_steering_hinge_position_controller/joint'
+               value          = '$(arg car_name)_right_steering_hinge_joint'/>
+
+  <!-- urdf xml robot description loaded on the Parameter Server, converting the xacro into a proper urdf file-->
+  <param       name           = '$(arg car_name)/robot_description'
+               command        = '$(find xacro)/xacro
+                                "$(find f1tenth-sim)/urdf/macros.xacro" robot_name:=$(arg car_name) robot_skin:=$(arg paint)'/>
+
+  <!-- push robot_description to factory and spawn robot in gazebo -->
+  <node        name           = '$(arg car_name)_spawn_model'
+               pkg            = 'gazebo_ros'
+               type           = 'spawn_model'
+               output         = 'screen'
+               args           = '-urdf -param $(arg car_name)/robot_description
+                                       -model $(arg car_name)
+                                       -x $(arg x_pos)
+                                       -y $(arg y_pos)
+                                       -z $(arg z_pos)'/>
+
+  <!-- load the controllers -->
+  <node        name           = 'controller_manager'
+               pkg            = 'controller_manager'
+               type           = 'spawner'
+               respawn        = 'false'
+               output         = 'screen'
+               ns             = '$(arg car_name)'
+               args           = 'left_rear_wheel_velocity_controller
+                                 right_rear_wheel_velocity_controller
+                                 left_front_wheel_velocity_controller
+                                 right_front_wheel_velocity_controller
+                                 left_steering_hinge_position_controller
+                                 right_steering_hinge_position_controller
+                                 joint_state_controller'/>
+
+  <group       ns             = '$(arg car_name)'>
+  <!-- static base_laser_link -->
+  <node        name           = 'base_laser_link'
+               pkg            = 'tf'
+               type           = 'static_transform_publisher'
+               args           = '0.325 0.0 0.05
+                                 0.0   0.0 0.0
+                                 $(arg car_name)_base_link
+                                 $(arg car_name)_laser
+                                 20'/>
+
+  <!-- launch base controller -->
+  <node        name           = 'control_plugin'
+               pkg            = 'f1tenth-sim'
+               type           = 'control_plugin.py'
+               args           = '$(arg car_name)'
+               output         = 'screen'/> </group>
+
+</launch>

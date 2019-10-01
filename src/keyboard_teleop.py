@@ -4,18 +4,19 @@ import rospy
 import sys
 import select
 import termios
+import tty
 
 from ackermann_msgs.msg import AckermannDrive
 
-car_name     = str(sys.argv[1])
-speed        = 0.05
-steer        = 0.25
-key_bindings = {
-    'w': (1, 0),
-    'd': (1, -1),
-    'a': (1, 1),
-    's': (-1, 0),
+keyBindings = {
+  'w':(1,0),
+  'd':(1,-1),
+  'a':(1,1),
+  's':(-1,0),
 }
+
+speed_limit = 0.50
+angle_limit = 0.25
 
 def getKey():
    tty.setraw(sys.stdin.fileno())
@@ -25,41 +26,40 @@ def getKey():
    return key
 
 def vels(speed, turn):
-  return 'currently:\tspeed %s\tturn %s ' % (speed,turn)
+  return 'currently:\tspeed {}\tturn {}'.format(speed, turn)
 
-if __name__ == '__main__':
+if __name__=="__main__":
+  settings = termios.tcgetattr(sys.stdin)
+  command_pub = rospy.Publisher('/{}/command'.format(str(sys.argv[1])), AckermannDrive, queue_size = 1)
+  rospy.init_node('keyboard_teleop', anonymous = True)
 
-    rospy.init_node('keyboard_teleop', anonymous = True)
+  speed  = 0
+  angle  = 0
+  status = 0
 
-    settings = termios.tcgetattr(sys.stdin)
-    command_pub = rospy.Publisher('/{}/command'.format(car_name), AckermannDrive, queue_size = 1)
-    speed_now = 0
-    steer_now = 0
-    status    = 0
+  try:
+    while True:
+       key = getKey()
+       if key in keyBindings.keys():
+          speed = keyBindings[key][0]
+          angle = keyBindings[key][1]
+       else:
+          speed = 0
+          angle = 0
+          if (key == '\x03'):
+             break
+       command = AckermannDrive();
+       command.speed = speed * speed_limit
+       command.steering_angle = angle * angle_limit
+       command_pub.publish(command)
 
-    try:
-        while True:
-           key = getKey()
-           if key in key_bindings.keys():
-              steer_now = key_bindings[key][0]
-              speed_now = key_bindings[key][1]
-           else:
-              steer_now = 0.0
-              speed_now = 0.0
-              if (key == '\x03'):
-                 break
+  except:
+    print 'error'
 
-           command = AckermannDrive();
-           command.steering_angle = steer_now * steer
-           command.speed = speed_now * speed
-           command_pub.publish(command)
+  finally:
+    command = AckermannDrive();
+    command.speed = speed * speed_limit
+    command.steering_angle = angle * angle_limit
+    command_pub.publish(command)
 
-    except:
-        print 'error: key bind'
-
-    finally:
-        command = AckermannDrive();
-        command.steering_angle = steer_now * steer
-        command.speed = speed_now * speed
-        command_pub.publish(command)
-        termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
+    termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)

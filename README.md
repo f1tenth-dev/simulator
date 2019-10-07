@@ -42,7 +42,7 @@ user@ros-computer: cd autosim_ws/src/range_libc/pywrapper
 
 There are two methods for installing the particle filter; with GPU support and without GPU support. We recommend using the package with GPU support, but leave the decision to you.
 
-**Installing with GPU Support**
+**Installing with GPU Support**  
 Keep this terminal open and pay special attention to the next step. The particle filter package depends heavily on the GPU and its architecture, so it becomes very important to match the architecture of the GPU in your local machine to the one listed in the configuration of `setup.py`. We are particularly interested in the `sm_xx` value associated with the GPU and more information can be found in this [article](https://arnon.dk/matching-sm-architectures-arch-and-gencode-for-various-nvidia-cards/) which is a good reference for understanding types NVIDIA's GPU. Once the architecture type has been identified, go back to the terminal and open the setup file using an editor of your choice and navigate to line 96:
 
 ```python
@@ -55,7 +55,7 @@ Replace `-arch=sm_20` with the `-arch=sm_xx` value from the article in the link 
 user@ros-computer: ./compile_with_cuda.sh
 ```
 
-**Installing without GPU Support**
+**Installing without GPU Support**  
 In the same terminal, enter the following command and follow the instructions in the screen:
 
 ```console
@@ -78,5 +78,5 @@ user@ros-computer: source ~/.bashrc
 
 You have now completed the steps necessary to install the simulator. The tutorial section will help you get started with the simulator.
 
-**Uninstalling the Simulator**
+**Uninstalling the Simulator**  
 Removing the simulator from your local machine is a two-step process: first remove the line from `~/.bashrc` that sources the simulator workspace and then delete the `autosim_ws` directory.

@@ -12,7 +12,7 @@ Panels:
         - /AI Agents1/Agent 11
         - /AI Agents1/Agent 21
       Splitter Ratio: 0.5617647171020508
-    Tree Height: 363
+    Tree Height: 442
   - Class: rviz/Selection
     Name: Selection
   - Class: rviz/Tool Properties
@@ -372,7 +372,7 @@ Visualization Manager:
       X std deviation: 0.5
       Y std deviation: 0.5
     - Class: rviz/SetGoal
-      Topic: /move_base_simple/goal
+      Topic: /car_1/move_base_simple/goal
     - Class: rviz/PublishPoint
       Single click: true
       Topic: /clicked_point

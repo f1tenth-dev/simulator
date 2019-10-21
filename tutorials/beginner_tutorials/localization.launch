@@ -1,0 +1,84 @@
+<?xml version='1.0'?>
+
+<launch>
+
+  <!-- global parameters -->
+  <arg         name           = 'car_name'
+               default        = 'car_1'/>
+  <arg         name           = 'scan_topic'
+               default        = '/$(arg car_name)/scan'/>
+	<arg         name           = 'odometry_topic'
+               default        = '/$(arg car_name)/base/odom'/>
+	<arg         name           = 'angle_step'
+               default        = '18'/>
+	<arg         name           = 'max_particles'
+               default        = '4000'/>
+	<arg         name           = 'squash_factor'
+               default        = '2.2'/>
+	<arg         name           = 'viz'
+               default        = '1'/>
+
+  <!-- map server -->
+  <node        name           = 'map_server'
+               pkg            = 'map_server'
+               type           = 'map_server'
+               args           = '$(find f1tenth-sim)/map/race_track.yaml'
+               output         = 'screen'>
+  <param       name           = 'frame_id'
+               value          = 'map'/> </node>
+
+  <!-- particle filter node -->
+	<node        pkg            = 'particle_filter'
+               type           = 'particle_filter.py'
+               name           = 'Particle_filter'
+               output         = 'screen'>
+	<param       name           = 'scan_topic'
+               value          = '$(arg scan_topic)'/>
+	<param       name           = 'odometry_topic'
+               value          = '$(arg odometry_topic)'/>
+	<param       name           = 'angle_step'
+               value          = '$(arg angle_step)'/>
+	<param       name           = 'max_particles'
+               value          = '$(arg max_particles)'/>
+	<param       name           = 'max_viz_particles'
+               value          = '60'/>
+	<param       name           = 'range_method'
+               value          = 'pcddt'/>
+	<param       name           = 'squash_factor'
+               value          = '$(arg squash_factor)'/>
+	<param       name           = 'theta_discretization'
+               value          = '112'/>
+	<param       name           = 'max_range'
+               value          = '10'/>
+	<param       name           = 'viz'
+               value          = '$(arg viz)'/>
+	<param       name           = 'fine_timing'
+               value          = '0'/>
+	<param       name           = 'publish_odom'
+               value          = '1'/>
+	<param       name           = 'z_short'
+               value          = '0.01'/>
+	<param       name           = 'z_max'
+               value          = '0.07'/>
+	<param       name           = 'z_rand'
+               value          = '0.12'/>
+	<param       name           = 'z_hit'
+               value          = '0.75'/>
+	<param       name           = 'sigma_hit'
+               value          = '8.0'/>
+	<param       name           = 'motion_dispersion_x'
+               value          = '0.05'/>
+	<param       name           = 'motion_dispersion_y'
+               value          = '0.025'/>
+	<param       name           = 'motion_dispersion_theta'
+               value          = '0.25'/>
+	<param       name           = 'rangelib_variant'
+               value          = '2'/> </node>
+
+  <!-- launch rviz with localization configuration -->
+  <node        pkg            = 'rviz'
+               type           = 'rviz'
+               name           = 'rviz'
+               args           = '-d $(find f1tenth-sim)/rviz/localization.rviz'/>
+
+</launch>

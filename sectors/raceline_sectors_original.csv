@@ -1,0 +1,14 @@
+132,875,unrestricted
+875,1113,caution
+1113,1880,unrestricted
+1880,2164,caution
+2164,2742,unrestricted
+2742,2977,caution
+2977,3198,brake
+3198,3676,caution
+3676,4466,brake
+4466,4703,caution
+4703,5351,unrestricted
+5351,5680,caution
+5680,5962,brake
+5962,132,caution

@@ -1,0 +1,108 @@
+<?xml version='1.0'?>
+
+<launch>
+
+  <!-- global parameters -->
+  <param       name           = 'use_sim_time'
+               value          = 'true'/>
+  <arg         name           = 'use_ackermann_model'
+               default        = 'true'/>
+  <arg         name           = 'use_adaptive_lookahead'
+               default        = 'true'/>
+  <arg         name           = 'adaptive_lookahead_dist'
+               default        = '2.0'/>
+  <arg         name           = 'velocity_scaler'
+               default        = '0.65'/>
+  <arg         name           = 'number_laps'
+               default        = '100'/>
+  <arg         name           = 'car_name'
+               default        = 'car_1'/>
+  <arg         name           = 'car_paint'
+               default        = 'Yellow'/>
+  <arg         name           = 'run_gazebo'
+               default        = 'true'/>
+  <arg         name           = 'x_pos'
+               default        = '2.5'/>
+  <arg         name           = 'y_pos'
+               default        = '-7.0'/>
+  <arg         name           = 'run_rviz'
+               default        = 'true'/>
+
+  <!-- map server -->
+  <node        name           = 'map_server'
+               pkg            = 'map_server'
+               type           = 'map_server'
+               args           = '$(find f1tenth-sim)/map/race_track.yaml'
+               output         = 'screen'>
+  <param       name           = 'frame_id'
+               value          = 'map'/> </node>
+
+  <!-- raceline visualizer -->
+  <node        name           = 'trajectory_visualizer'
+               pkg            = 'f1tenth-sim'
+               type           = 'trajectory_visualizer.py'
+               args           = 'raceline raceline_sectors_original'/>
+
+  <!-- spawn car using the set global parameters -->
+  <include     file           = '$(find f1tenth-sim)/launch/simulator.launch'>
+  <arg         name           = 'car_name'
+               value          = '$(arg car_name)'/>
+  <arg         name           = 'paint'
+               value          = '$(arg car_paint)'/>
+  <arg         name           = 'run_gazebo'
+               value          = '$(arg run_gazebo)'/>
+  <arg         name           = 'x_pos'
+               value          = '$(arg x_pos)'/>
+  <arg         name           = 'y_pos'
+               value          = '$(arg y_pos)'/> </include>
+
+  <group       ns             = '$(arg car_name)'>
+
+  <group       ns             = 'purepursuit_control'>
+
+  <!-- find nearest pose -->
+  <node        name           = 'nearest_pose_isolator'
+               pkg            = 'f1tenth-sim'
+               type           = 'find_nearest_pose.py'
+               args           = '$(arg car_name) raceline'/>
+
+  <!-- calculate lookahead distance range -->
+  <node        name           = 'adaptive_lookahead_node'
+               pkg            = 'f1tenth-sim'
+               type           = 'adaptive_lookahead.py'
+               args           = '$(arg car_name) raceline_sectors_original'/>
+
+  <!-- find goal using lookahead distance -->
+  <node        name           = 'nearest_goal_isolator'
+               pkg            = 'f1tenth-sim'
+               type           = 'find_nearest_goal.py'
+               args           = '$(arg car_name) raceline $(arg use_adaptive_lookahead) $(arg adaptive_lookahead_dist)'/>
+
+  <!-- vehicle controller -->
+  <node        name           = 'purepursuit_controller'
+               pkg            = 'f1tenth-sim'
+               type           = 'vehicle_controller.py'
+               args           = '$(arg car_name) $(arg use_ackermann_model) $(arg use_adaptive_lookahead) $(arg velocity_scaler)'/>
+
+  <!-- purepursuit visualizer -->
+  <node        name           = 'purepursuit_visualizer'
+               pkg            = 'f1tenth-sim'
+               type           = 'purepursuit_visualizer.py'
+               args           = '$(arg car_name)'/>
+
+  <!-- lap statistics visualizer -->
+  <node        name           = 'statistics_logger'
+               pkg            = 'f1tenth-sim'
+               type           = 'lap_statistics.py'
+               args           = '$(arg car_name)'
+               output         = 'screen'
+               launch-prefix  = 'xterm -e'/> </group> </group>
+
+  <!-- launch rviz with navigation configuration -->
+  <group       if             = '$(arg run_rviz)'>
+  <node        pkg            = 'rviz'
+               type           = 'rviz'
+               name           = 'rviz'
+               args           = '-d $(find f1tenth-sim)/rviz/purepursuit_control.rviz'/> </group>
+
+</launch>

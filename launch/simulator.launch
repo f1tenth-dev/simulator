@@ -17,6 +17,8 @@
                default        = 'Yellow'/>
   <arg         name           = 'remote_control'
                default        = 'false'/>
+  <arg         name           = 'keyboard_control'
+               default        = 'false'/>
 
   <!-- run gazebo by default only once -->
   <group       if             = '$(arg run_gazebo)'>
@@ -61,6 +63,12 @@
                pkg            = 'f1tenth-sim'
                type           = 'remote_control.py'
                args           = '$(arg car_name)'/> </group>
+
+  <!-- check if keyboard control is required -->
+  <group       if             = '$(arg keyboard_control)'>
+  <node        name           = 'keyboard_plugin'
+               pkg            = 'f1tenth-sim'
+               type           = 'keyboard_teleop.py'/> </group>
 
   <!-- spawn car using the set global parameters -->
   <include     file           = '$(find f1tenth-sim)/config/vehicle_class.launch.xml'>

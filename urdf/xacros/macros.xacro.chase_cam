@@ -1,0 +1,586 @@
+<?xml version="1.0"?>
+
+<robot name="virtual_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Global namespace -->
+  <xacro:arg name="robot_name" default="car_1" />
+  <xacro:arg name="robot_skin" default="Blue" />
+
+  <!-- inertial parameter macros -->
+
+  <xacro:macro name="chassis_inertial_params">
+    <origin xyz="0.1477 0 0" rpy="0 0 0" />
+    <mass value="4.0" />
+    <inertia ixx="0.010609" ixy="0"          ixz="0"
+                            iyy="0.050409"   iyz="0"
+                                             izz="0.05865" />
+  </xacro:macro>
+
+  <xacro:macro name="left_wheels_inertial_params">
+    <origin xyz="0 0 -0.0225" rpy="0 0 0" />
+    <mass value="0.34055" />
+    <inertia ixx="0.00026046" ixy="0"          ixz="0"
+                              iyy="0.00026046" iyz="0"
+                                               izz="0.00041226" />
+  </xacro:macro>
+
+  <xacro:macro name="right_wheels_inertial_params">
+    <origin xyz="0 0 0.0225" rpy="0 0 0" />
+    <mass value="0.34055" />
+    <inertia ixx="0.00026046" ixy="0"          ixz="0"
+                              iyy="0.00026046" iyz="0"
+                                               izz="0.00041226" />
+  </xacro:macro>
+
+  <xacro:macro name="steering_hinge_inertial_params">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <mass value="0.100" />
+    <inertia ixx="4E-06" ixy="0"           ixz="0"
+                              iyy="4E-06"  iyz="0"
+                                                izz="4E-06" />
+  </xacro:macro>
+
+  <xacro:macro name="hokuyo_inertial_params">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <mass value="0.130" />
+    <inertia ixx="4E-06" ixy="0"           ixz="0"
+                              iyy="4E-06"  iyz="0"
+                                                izz="4E-06" />
+  </xacro:macro>
+
+
+  <!-- geometry macros -->
+
+  <xacro:macro name="chassis_geometry">
+    <origin xyz="0.46 -0.135 -0.180" rpy="1.57 0 3.14" />
+    <geometry>
+      <mesh filename="package://f1tenth-sim/urdf/meshes/chassis.stl" scale="0.000990 0.0009375 0.0009375"/>
+    </geometry>
+  </xacro:macro>
+
+
+  <xacro:macro name="left_rear_wheel_geometry">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <geometry>
+      <mesh filename="package://f1tenth-sim/urdf/meshes/left_wheel.stl" />
+    </geometry>
+  </xacro:macro>
+
+  <xacro:macro name="right_rear_wheel_geometry">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <geometry>
+      <mesh filename="package://f1tenth-sim/urdf/meshes/right_wheel.stl" />
+    </geometry>
+  </xacro:macro>
+
+  <xacro:macro name="left_front_wheel_geometry">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <geometry>
+      <mesh filename="package://f1tenth-sim/urdf/meshes/left_wheel.stl" />
+    </geometry>
+  </xacro:macro>
+
+  <xacro:macro name="right_front_wheel_geometry">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <geometry>
+      <mesh filename="package://f1tenth-sim/urdf/meshes/right_wheel.stl" />
+    </geometry>
+  </xacro:macro>
+
+  <xacro:macro name="left_steering_hinge_geometry">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <geometry>
+      <mesh filename="package://f1tenth-sim/urdf/meshes/hinge.stl" />
+    </geometry>
+  </xacro:macro>
+
+  <xacro:macro name="right_steering_hinge_geometry">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <geometry>
+      <mesh filename="package://f1tenth-sim/urdf/meshes/hinge.stl" />
+    </geometry>
+  </xacro:macro>
+
+  <xacro:macro name="left_wheels_collision_geometry">
+    <origin xyz="0 0 -0.0225" rpy="0 0 0" />
+    <geometry>
+      <cylinder length="0.045" radius="0.05" />
+    </geometry>
+  </xacro:macro>
+
+  <xacro:macro name="right_wheels_collision_geometry">
+    <origin xyz="0 0 0.0225" rpy="0 0 0" />
+    <geometry>
+      <cylinder length="0.045" radius="0.05" />
+    </geometry>
+  </xacro:macro>
+
+  <!-- transmission macros -->
+
+  <xacro:macro name="wheel_transmission" params="name">
+    <transmission name="${name}_transmission" type="SimpleTransmission">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${name}_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${name}_motor">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+  </xacro:macro>
+
+  <xacro:macro name="steering_hinge_transmission" params="name">
+    <transmission name="${name}_transmission" type="SimpleTransmission">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${name}_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${name}_motor">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+  </xacro:macro>
+
+  <!-- Add chassis and it's inertia link -->
+
+  <link name="$(arg robot_name)_base_link"/>
+
+  <link name="$(arg robot_name)_chassis">
+    <visual>
+      <xacro:chassis_geometry/>
+      <material name="red" />
+    </visual>
+  </link>
+
+  <joint name="$(arg robot_name)_base_link_joint" type="fixed">
+    <origin xyz="0 0 0.05" rpy="0 0 0" />
+    <parent link="$(arg robot_name)_base_link" />
+    <child link="$(arg robot_name)_chassis" />
+  </joint>
+
+  <link name="$(arg robot_name)_chassis_inertia">
+    <inertial>
+      <xacro:chassis_inertial_params />
+    </inertial>
+  </link>
+
+  <joint name="$(arg robot_name)_chassis_inertia_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="$(arg robot_name)_chassis" />
+    <child link="$(arg robot_name)_chassis_inertia" />
+  </joint>
+
+  <!-- Add the left rear wheel with its joints and tranmissions -->
+
+  <link name="$(arg robot_name)_left_rear_wheel">
+    <inertial>
+      <xacro:left_wheels_inertial_params />
+    </inertial>
+    <visual>
+      <xacro:left_rear_wheel_geometry />
+      <material name="black" />
+    </visual>
+    <collision>robot
+      <xacro:left_wheels_collision_geometry />
+    </collision>
+  </link>
+
+  <joint name="$(arg robot_name)_left_rear_wheel_joint" type="continuous">
+    <origin xyz="0 0.1 0" rpy="1.5708 0 0" />
+    <parent link="$(arg robot_name)_chassis" />
+    <child link="$(arg robot_name)_left_rear_wheel" />
+    <axis xyz="0 0 -1" />
+    <limit effort="10" velocity="100" />
+  </joint>
+
+  <xacro:wheel_transmission name="$(arg robot_name)_left_rear_wheel" />
+
+  <!-- Add the right rear wheel with its joints and tranmissions -->
+
+  <link name="$(arg robot_name)_right_rear_wheel">
+    <inertial>
+      <xacro:right_wheels_inertial_params />
+    </inertial>
+    <visual>
+      <xacro:right_rear_wheel_geometry />
+      <material name="black" />
+    </visual>
+    <collision>
+      <xacro:right_wheels_collision_geometry />
+    </collision>
+  </link>
+
+  <joint name="$(arg robot_name)_right_rear_wheel_joint" type="continuous">
+    <origin xyz="0 -0.1 0" rpy="1.5708 0 0" />
+    <parent link="$(arg robot_name)_chassis" />
+    <child link="$(arg robot_name)_right_rear_wheel" />
+    <axis xyz="0 0 -1" />
+    <limit effort="10" velocity="100" />
+  </joint>
+
+  <xacro:wheel_transmission name="$(arg robot_name)_right_rear_wheel" />
+
+  <!-- Add the left steering hinge with its joints and tranmissions -->
+
+  <link name="$(arg robot_name)_left_steering_hinge">
+    <inertial>
+      <xacro:steering_hinge_inertial_params />
+    </inertial>
+    <visual>
+      <xacro:left_steering_hinge_geometry />
+      <material name="grey" />
+    </visual>
+  </link>
+
+  <joint name="$(arg robot_name)_left_steering_hinge_joint" type="revolute">
+    <origin xyz="0.325 0.1 0" rpy="0 1.5708 0" />
+    <parent link="$(arg robot_name)_chassis" />
+    <child link="$(arg robot_name)_left_steering_hinge" />
+    <axis xyz="-1 0 0" />
+    <limit lower="-1.0" upper="1.0" effort="10" velocity="100" />
+  </joint>
+
+  <xacro:steering_hinge_transmission name="$(arg robot_name)_left_steering_hinge" />
+
+  <!-- Add the right steering hinge with its joints and tranmissions -->
+
+  <link name="$(arg robot_name)_right_steering_hinge">
+    <inertial>
+      <xacro:steering_hinge_inertial_params />
+    </inertial>
+    <visual>
+      <xacro:right_steering_hinge_geometry />
+      <material name="grey" />
+    </visual>
+  </link>
+
+  <joint name="$(arg robot_name)_right_steering_hinge_joint" type="continuous">
+    <origin xyz="0.325 -0.1 0" rpy="0 1.5708 0" />
+    <parent link="$(arg robot_name)_chassis" />
+    <child link="$(arg robot_name)_right_steering_hinge" />
+    <axis xyz="-1 0 0" />
+    <limit lower="-1.0" upper="1.0" effort="10" velocity="100" />
+  </joint>
+
+  <xacro:steering_hinge_transmission name="$(arg robot_name)_right_steering_hinge" />
+
+  <!-- Add the left front wheel with its joints and tranmissions -->
+
+  <link name="$(arg robot_name)_left_front_wheel">
+    <inertial>
+      <xacro:left_wheels_inertial_params />
+    </inertial>
+    <visual>
+      <xacro:left_front_wheel_geometry />
+      <material name="black" />
+    </visual>
+    <collision>
+      <xacro:left_wheels_collision_geometry />
+    </collision>
+  </link>
+
+  <joint name="$(arg robot_name)_left_front_wheel_joint" type="continuous">
+    <origin xyz="0 0 0" rpy="1.5708 0 0" />
+    <parent link="$(arg robot_name)_left_steering_hinge" />
+    <child link="$(arg robot_name)_left_front_wheel" />
+    <axis xyz="0 0 -1" />
+    <limit effort="10" velocity="100" />
+  </joint>
+
+  <xacro:wheel_transmission name="$(arg robot_name)_left_front_wheel" />
+
+  <!-- Add the left front wheel with its joints and tranmissions -->
+
+  <link name="$(arg robot_name)_right_front_wheel">
+    <inertial>
+      <xacro:right_wheels_inertial_params />
+    </inertial>
+    <visual>
+      <xacro:right_front_wheel_geometry />
+      <material name="black" />
+    </visual>
+    <collision>
+      <xacro:right_wheels_collision_geometry />
+    </collision>
+  </link>
+
+  <joint name="$(arg robot_name)_right_front_wheel_joint" type="continuous">
+    <origin xyz="0 0 0" rpy="1.5708 0 0" />
+    <parent link="$(arg robot_name)_right_steering_hinge" />
+    <child link="$(arg robot_name)_right_front_wheel" />
+    <axis xyz="0 0 -1" />
+    <limit effort="10" velocity="100"/>
+  </joint>
+
+  <xacro:wheel_transmission name="$(arg robot_name)_right_front_wheel" />
+
+  <!-- Add Hokuyo laser scanner -->
+
+  <link name="$(arg robot_name)_laser">
+    <inertial>
+      <xacro:hokuyo_inertial_params />
+    </inertial>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://f1tenth-sim/urdf/meshes/hokuyo.stl"/>
+        <material name="grey" />
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="$(arg robot_name)_hokuyo_joint" type="fixed">
+    <origin xyz="0.125 0.0 0.155" rpy="0 0 0"/>
+    <parent link="$(arg robot_name)_chassis" />
+    <child link="$(arg robot_name)_laser" />
+    <axis xyz="0 0 1" />
+  </joint>
+
+
+  <!-- camera class (spawn parameters) -->
+  <link name="$(arg robot_name)_link">
+    <inertial>
+      <mass value="1e-5" />
+      <origin xyz="0 0 0.25" rpy="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+    </inertial>
+    <collision>
+      <origin xyz="0 0 0.25" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.033 0.175 0.030"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 0 0.025" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.033 0.175 0.030"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+  </link>
+
+  <joint name="$(arg robot_name)_joint" type="fixed">
+    <origin xyz="0.390 0 0.025" rpy="0 0 0"/>
+    <parent link="$(arg robot_name)_chassis"/>
+    <child link="$(arg robot_name)_link"/>
+    <axis xyz="0 0 1" />
+    <!-- <limit lower="0.0" upper="0.0" effort="0.0" velocity="0.0" /> -->
+  </joint>
+
+
+  <!-- camera lenses -->
+  <link name="$(arg robot_name)_camera_link">
+    <inertial>
+      <mass value="1e-5" />
+      <origin xyz="-2.5 1.5 1.75" rpy="0 .57 -0.57"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+    </inertial>
+  </link>
+  <link name="$(arg robot_name)_right_link">
+    <inertial>
+      <mass value="1e-5" />
+      <origin xyz="-2.5 1.5 1.75" rpy="0 .57 -0.57"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+    </inertial>
+  </link>
+
+  <joint name="$(arg robot_name)_left_joint" type="fixed">
+    <origin xyz="-2.5 1.5 1.75" rpy="0 .57 -0.57"/>
+    <parent link="$(arg robot_name)_link"/>
+    <child link="$(arg robot_name)_camera_link"/>
+    <axis xyz="0 0 1" />
+  </joint>
+  <joint name="$(arg robot_name)_right_joint" type="fixed">
+    <origin xyz="0 -0.06 0.025" rpy="0 0 0"/>
+    <parent link="$(arg robot_name)_link"/>
+    <child link="$(arg robot_name)_right_link"/>
+    <axis xyz="0 0 1" />
+  </joint>
+
+  <!-- Gazebo references -->
+
+  <gazebo reference="$(arg robot_name)_chassis">
+    <mu1 value="0.0"/>
+    <mu2 value="0.0"/>
+    <kp  value="10000000.0" />
+    <kd  value="1.0" />
+    <material>Gazebo/$(arg robot_skin)</material>
+  </gazebo>
+
+  <gazebo reference="$(arg robot_name)_left_rear_wheel">
+    <mu1 value="1.0"/>
+    <mu2 value="1.0"/>
+    <kp  value="10000000.0" />
+    <kd  value="1.0" />
+    <fdir1 value="1 0 0"/>
+    <material>Gazebo/Black</material>
+  </gazebo>
+
+  <gazebo reference="$(arg robot_name)_right_rear_wheel">
+    <mu1 value="1.0"/>
+    <mu2 value="1.0"/>
+    <kp  value="10000000.0" />
+    <kd  value="1.0" />
+    <fdir1 value="1 0 0"/>
+    <material>Gazebo/Black</material>
+  </gazebo>
+
+  <gazebo reference="$(arg robot_name)_left_front_wheel">
+    <mu1 value="1.0"/>
+    <mu2 value="1.0"/>
+    <kp  value="10000000.0" />
+    <kd  value="1.0" />
+    <fdir1 value="0 0 1"/>
+    <material>Gazebo/Black</material>
+  </gazebo>
+
+  <gazebo reference="$(arg robot_name)_right_front_wheel">
+    <mu1 value="1.0"/>
+    <mu2 value="1.0"/>
+    <kp  value="10000000.0" />
+    <kd  value="1.0" />
+    <fdir1 value="0 0 1"/>
+    <material>Gazebo/Black</material>
+  </gazebo>
+
+  <!-- Gazebo plugins -->
+
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/$(arg robot_name)</robotNamespace>
+      <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+    </plugin>
+  </gazebo>
+
+  <!-- Odometry (cheap hack) -->
+  <gazebo>
+    <plugin name="p3d_base_controller" filename="libgazebo_ros_p3d.so">
+      <alwaysOn>true</alwaysOn>
+      <updateRate>50.0</updateRate>
+      <bodyName>$(arg robot_name)_base_link</bodyName>
+      <topicName>/$(arg robot_name)/ground_truth</topicName>
+      <gaussianNoise>0.01</gaussianNoise>
+      <frameName>world</frameName>
+      <xyzOffsets>0 0 0</xyzOffsets>
+      <rpyOffsets>0 0 0</rpyOffsets>
+    </plugin>
+  </gazebo>
+
+    <!-- hokuyo -->
+  <xacro:unless value="$(optenv DISABLE_GAZEBO_LASER false)">
+    <gazebo reference="$(arg robot_name)_laser">
+      <material>Gazebo/Grey</material>
+      <sensor type="ray" name="$(arg robot_name)_hokuyo_sensor">
+        <pose>0 0 0.0124 0 0 0</pose>
+        <visualize>false</visualize>
+        <update_rate>40</update_rate>
+        <ray>
+          <scan>
+            <horizontal>
+              <samples>1081</samples>
+              <resolution>1</resolution>
+              <min_angle>-2.3561944902</min_angle>
+              <max_angle>2.3561944902</max_angle>
+            </horizontal>
+          </scan>
+          <range>
+            <min>0.1</min>
+            <max>30.0</max>
+            <resolution>0.01</resolution>
+          </range>
+          <noise>
+            <mean>0.0</mean>
+            <stddev>0.01</stddev>
+          </noise>
+        </ray>
+        <plugin name="gazebo_ros_hokuyo_controller" filename="libgazebo_ros_laser.so">
+          <topicName>/$(arg robot_name)/scan</topicName>
+          <frameName>$(arg robot_name)_laser</frameName>
+        </plugin>
+      </sensor>
+    </gazebo>
+  </xacro:unless>
+
+  <!-- camera object -->
+  <xacro:unless value="$(optenv DISABLE_GAZEBO_CAMERA false)">
+    <gazebo reference="$(arg robot_name)_camera_link">
+      <sensor type="camera" name="$(arg robot_name)_left_sensor">
+        <update_rate>30.0</update_rate>
+        <!-- math.atan(320 / 687.8065795898438) * 2 -->
+        <camera name="front_camera">
+          <!-- horizontal_fov>0.8709216071359963</horizontal_fov -->
+          <horizontal_fov>1.74</horizontal_fov>
+          <image>
+            <width>1920</width>
+            <height>1080</height>
+            <format>B8G8R8</format>
+          </image>
+          <clip>
+            <near>0.02</near>
+            <far>300</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+        </camera>
+        <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+          <alwaysOn>true</alwaysOn>
+          <updateRate>30.0</updateRate>
+          <cameraName>/$(arg robot_name)/camera</cameraName>
+          <imageTopicName>image</imageTopicName>
+          <cameraInfoTopicName>rgb/camera_info</cameraInfoTopicName>
+          <frameName>$(arg robot_name)_camera_link</frameName>
+          <hackBaseline>0</hackBaseline><!-- set this to 0.12 for the second camera -->
+          <distortionK1>0.0</distortionK1>
+          <distortionK2>0.0</distortionK2>
+          <distortionK3>0.0</distortionK3>
+          <distortionT1>0.0</distortionT1>
+          <distortionT2>0.0</distortionT2>
+        </plugin>
+      </sensor>
+    </gazebo>
+  </xacro:unless>
+
+  <material name="black">
+    <color rgba="0.0 0.0 0.0 1.0"/>
+  </material>
+
+  <material name="blue">
+    <color rgba="0.0 0.0 0.8 1.0"/>
+  </material>
+
+  <material name="green">
+    <color rgba="0.0 0.8 0.0 1.0"/>
+  </material>
+
+  <material name="grey">
+    <color rgba="0.2 0.2 0.2 1.0"/>
+  </material>
+
+  <material name="orange">
+    <color rgba="${255/255} ${108/255} ${10/255} 1.0"/>
+  </material>
+
+  <material name="brown">
+    <color rgba="${222/255} ${207/255} ${195/255} 1.0"/>
+  </material>
+
+  <material name="red">
+    <color rgba="0.8 0.0 0.0 1.0"/>
+  </material>
+
+  <material name="white">
+    <color rgba="1.0 1.0 1.0 1.0"/>
+  </material>
+
+</robot>

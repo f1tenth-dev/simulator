@@ -14,10 +14,10 @@ The node expects 2 additional arguments where each argument is a tuple. The firs
 user@ros-computer: roslaunch f1tenth-sim simulator run_gazebo:=false
 ```
 
-Observe the position of the racecar in the siulator GUI and launch a new terminal to enter the following command. The tuple contains 3 elements describing the information on each axis relative to the race track; for the first positional tuple, the structure is `(x_pos, y_pos, z_pos)` and for the second velocity tuple: `(x_vel, y_vel, z_vel)`. All data within the tuple must be a float for the node to work.
+Observe the position of the racecar in the siulator GUI and launch a new terminal to enter the following command. The tuple contains 3 elements describing the information on each axis relative to the race track; for the first positional tuple, the structure is `x_pos y_pos z_pos` and for the second velocity tuple: `x_vel y_vel z_vel`. All data within the tuple must be a float for the node to work.
 
 ```console
-user@ros-computer: rosrun f1tenth-sim set_racecar_state.py car_1 (0.0, 0.0, 5.0) (0.0, 0.0, 0.0)
+user@ros-computer: rosrun f1tenth-sim set_racecar_state.py car_1 0.0 0.0 5.0 0.0 0.0 0.0
 ```
 
 The first tuple commands the node to move the racecar to the origin of the race track and raise it to 5.0 meters above the surface of the race track. You can enter this command multiple times to get the same effect. If you wish to set the initial velocity of the racecar, modify the second tuple accordigly. It is important to note that the velocity tuple sets the velocity to the racecar as a physical object and no torque will be observeable on the wheels.

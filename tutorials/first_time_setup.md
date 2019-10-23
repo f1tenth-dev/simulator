@@ -1,6 +1,6 @@
 ## Getting Started (Basic Tutorials)
 
-**Note**: If you have not yet completed the steps to install the simulator, the steps shown in this tutorial will not work. It is very important that you follow the instruction to donload, compile, install and source the simulator as described.
+**Note**: If you have not yet completed the steps to install the simulator, the steps shown in this tutorial will not work. It is very important that you follow the instruction to download, compile, install and source the simulator as described.
 
 The ROS F1/10 Autonomous Racecar Simulator consists of two major elements: the racecar and the race track. More details about the elements are provided throughout this tutorial.
 

@@ -1,6 +1,6 @@
 ## Getting Started (Basic Tutorials)
 
-**Note**: If you have not yet completed the steps to install the simulator, the steps shown in this tutorial will not work. It is very important that you follow the instruction to donload, compile, install and source the simulator as described.
+**Note**: If you have not yet completed the steps to install the simulator, the steps shown in this tutorial will not work. It is very important that you follow the instruction to download, compile, install and source the simulator as described.
 
 The ROS F1/10 Autonomous Racecar Simulator consists of two major elements: the racecar and the race track. More details about the elements are provided throughout this tutorial.
 
@@ -10,7 +10,7 @@ The racecar element of the simulator is the mobile, controllable, high-speed Ack
 The sensor suite currently tested and supported in the simulator include a 2D scanning lidar, a collision detection sensor, multiple RGB cameras and a wheel odometer. The sensor descriptions are usually loaded in the `xacro` description of the racecar and can be enabled/disabled by commenting in/out the sensor blocks in the file located at `urdf/macros.xacro`  
 
 The simulator allows you to spawn the racecar with some or all the sensors by editing the file above. The user can also set the initial pose and certain control and visual properties of the racecar including:
-1. Color of the racecar:
+1. Color of the racecar
 2. Initial pose of the racecar `(x,y,z,theta)`
 3. Remote tele-operation `enable` or `disable`
 

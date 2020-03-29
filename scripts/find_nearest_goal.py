@@ -36,7 +36,7 @@ plan_size    = 0
 
 def construct_path():
     global plan_size
-    file_path = os.path.expanduser('~/catkin_ws/src/f1tenth_purepursuit/path/{}.csv'.format(trajectory_name))
+    file_path = os.path.join(os.path.dirname(__file__), '../path/{}.csv'.format(trajectory_name))
 
     with open(file_path) as csv_file:
         csv_reader = csv.reader(csv_file, delimiter = ',')

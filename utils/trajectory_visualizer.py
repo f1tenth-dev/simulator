@@ -17,7 +17,7 @@ sectors  = []
 frame_id = 'map'
 
 def get_plan():
-    file_path = os.path.expanduser('~/catkin_ws/src/f1tenth_purepursuit/path/{}.csv'.format(trajectory_name))
+    file_path = os.path.join(os.path.dirname(__file__), '../path/{}.csv'.format(trajectory_name))
     with open(file_path) as csv_file:
         csv_reader = csv.reader(csv_file, delimiter = ',')
         for waypoint in csv_reader:
@@ -27,7 +27,7 @@ def get_plan():
             plan[index][point] = float(plan[index][point])
 
 def get_sectors():
-    file_path = os.path.expanduser('~/catkin_ws/src/f1tenth_purepursuit/sectors/{}.csv'.format(sector_list))
+    file_path = os.path.join(os.path.dirname(__file__), '../sectors/{}.csv'.format(sector_list))
     with open(file_path) as csv_file:
         csv_reader = csv.reader(csv_file, delimiter = ',')
         for sector in csv_reader:

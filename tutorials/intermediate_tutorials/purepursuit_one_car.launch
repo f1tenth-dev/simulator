@@ -94,7 +94,7 @@
   <node        name           = 'statistics_logger'
                pkg            = 'f1tenth-sim'
                type           = 'lap_statistics.py'
-               args           = '$(arg car_name)'
+               args           = '$(arg car_name) $(arg number_laps)'
                output         = 'screen'
                launch-prefix  = 'xterm -e'/> </group> </group>
 

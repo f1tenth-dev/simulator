@@ -86,11 +86,13 @@ def pose_callback(data):
 
     # ang_lookahead_dist = int(rospy.get_param('lookahead_dist'))
 
-    pose_index = data.data + ang_lookahead_dist
+    # pose_index = data.data + ang_lookahead_dist
 
-    if pose_index >= plan_size - 1:
-        pose_index = pose_index - plan_size - 2
+    # if pose_index >= plan_size - 1:
+    #     pose_index = pose_index - plan_size - 2
 
+    pose_index = (data.data + ang_lookahead_dist) % plan_size
+    
     goal                    = PoseStamped()
     goal.header.seq         = seq
     goal.header.stamp       = rospy.Time.now()
@@ -102,11 +104,12 @@ def pose_callback(data):
 
     ang_goal_pub.publish(goal)
 
-    pose_index = data.data + vel_lookahead_dist
+    # pose_index = data.data + vel_lookahead_dist
 
-    if pose_index > plan_size:
-        pose_index = pose_index - plan_size
+    # if pose_index > plan_size:
+    #     pose_index = pose_index - plan_size
 
+    pose_index = (data.data + vel_lookahead_dist) % plan_size
     # rospy.loginfo('current index: {}/{}'.format(pose_index, plan_size))
 
     goal                    = PoseStamped()

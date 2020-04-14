@@ -54,7 +54,7 @@
   <xacro:macro name="chassis_geometry">
     <origin xyz="0.46 -0.135 -0.180" rpy="1.57 0 3.14" />
     <geometry>
-      <mesh filename="package://f1tenth-sim/urdf/meshes/chassis.stl" scale="0.000990 0.0009375 0.0009375"/>
+      <mesh filename="package://spring_2020_virtual_class/urdf/meshes/chassis.stl" scale="0.000990 0.0009375 0.0009375"/>
     </geometry>
   </xacro:macro>
 
@@ -62,42 +62,42 @@
   <xacro:macro name="left_rear_wheel_geometry">
     <origin xyz="0 0 0" rpy="0 0 0" />
     <geometry>
-      <mesh filename="package://f1tenth-sim/urdf/meshes/left_wheel.stl" />
+      <mesh filename="package://spring_2020_virtual_class/urdf/meshes/left_wheel.stl" />
     </geometry>
   </xacro:macro>
 
   <xacro:macro name="right_rear_wheel_geometry">
     <origin xyz="0 0 0" rpy="0 0 0" />
     <geometry>
-      <mesh filename="package://f1tenth-sim/urdf/meshes/right_wheel.stl" />
+      <mesh filename="package://spring_2020_virtual_class/urdf/meshes/right_wheel.stl" />
     </geometry>
   </xacro:macro>
 
   <xacro:macro name="left_front_wheel_geometry">
     <origin xyz="0 0 0" rpy="0 0 0" />
     <geometry>
-      <mesh filename="package://f1tenth-sim/urdf/meshes/left_wheel.stl" />
+      <mesh filename="package://spring_2020_virtual_class/urdf/meshes/left_wheel.stl" />
     </geometry>
   </xacro:macro>
 
   <xacro:macro name="right_front_wheel_geometry">
     <origin xyz="0 0 0" rpy="0 0 0" />
     <geometry>
-      <mesh filename="package://f1tenth-sim/urdf/meshes/right_wheel.stl" />
+      <mesh filename="package://spring_2020_virtual_class/urdf/meshes/right_wheel.stl" />
     </geometry>
   </xacro:macro>
 
   <xacro:macro name="left_steering_hinge_geometry">
     <origin xyz="0 0 0" rpy="0 0 0" />
     <geometry>
-      <mesh filename="package://f1tenth-sim/urdf/meshes/hinge.stl" />
+      <mesh filename="package://spring_2020_virtual_class/urdf/meshes/hinge.stl" />
     </geometry>
   </xacro:macro>
 
   <xacro:macro name="right_steering_hinge_geometry">
     <origin xyz="0 0 0" rpy="0 0 0" />
     <geometry>
-      <mesh filename="package://f1tenth-sim/urdf/meshes/hinge.stl" />
+      <mesh filename="package://spring_2020_virtual_class/urdf/meshes/hinge.stl" />
     </geometry>
   </xacro:macro>
 
@@ -331,7 +331,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
-        <mesh filename="package://f1tenth-sim/urdf/meshes/hokuyo.stl"/>
+        <mesh filename="package://spring_2020_virtual_class/urdf/meshes/hokuyo.stl"/>
         <material name="grey" />
       </geometry>
     </visual>
@@ -380,20 +380,20 @@
   <link name="$(arg robot_name)_camera_link">
     <inertial>
       <mass value="1e-5" />
-      <origin xyz="-0.25 0 0.025" rpy="0 0 0"/>
+      <origin xyz="-2.5 1.5 1.75" rpy="0 .57 -0.57"/>
       <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
     </inertial>
   </link>
   <link name="$(arg robot_name)_right_link">
     <inertial>
       <mass value="1e-5" />
-      <origin xyz="0 0 0.025" rpy="0 0 0"/>
+      <origin xyz="-2.5 1.5 1.75" rpy="0 .57 -0.57"/>
       <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
     </inertial>
   </link>
 
   <joint name="$(arg robot_name)_left_joint" type="fixed">
-    <origin xyz="0 0 0.035" rpy="0 0 0"/>
+    <origin xyz="-2.5 1.5 1.75" rpy="0 .57 -0.57"/>
     <parent link="$(arg robot_name)_link"/>
     <child link="$(arg robot_name)_camera_link"/>
     <axis xyz="0 0 1" />

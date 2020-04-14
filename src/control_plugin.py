@@ -22,7 +22,7 @@ car_name = str(sys.argv[1])
 # subscriber topics
 
 gazebo_odom_topic = '/{}/ground_truth'.format(car_name)
-command_topic     = '/{}/command'.format(car_name)
+command_topic     = '/{}/multiplexer/command'.format(car_name)
 
 # publisher topics
 
@@ -98,8 +98,8 @@ def odom_callback(data):
     odom.child_frame_id       = base_frame
     odom.header.stamp         = rospy.Time.now()
     odom.pose                 = data.pose
-    odom.pose.pose.position.x = odom.pose.pose.position.x - 2.5
-    odom.pose.pose.position.y = odom.pose.pose.position.y + 7.0
+    odom.pose.pose.position.x = odom.pose.pose.position.x + 9.0
+    odom.pose.pose.position.y = odom.pose.pose.position.y + 5.0
     odom.twist = data.twist
 
     tf = TransformStamped(header         = Header(
@@ -124,7 +124,7 @@ global previous_speed
 previous_speed   = 0.0
 min_speed        = 0.0
 max_speed        = 80.0  # 100.0
-speed_delta      = 0.315 # 1.25
+speed_delta      = 10.0  # 1.25
 previous_speed   = 0.0
 
 # command callback
@@ -139,31 +139,23 @@ def command_callback(data):
     steering_angle.data = data.steering_angle
     speed.data          = data.speed * max_speed
 
-    acceleration_factor = speed_delta
-
-    if not speed.data == 0.0:
-        speed_dir = speed.data/abs(speed.data)
-        speed.data = abs(speed.data)
-    else:
-        if previous_speed < 0.0:
-            speed_dir = -1.0
-        else:
-            speed_dir = 1.0
-
-    previous_speed = abs(previous_speed)
-
-    if speed.data >= previous_speed + acceleration_factor:
-        speed.data = previous_speed + acceleration_factor
-    elif speed.data <= previous_speed - acceleration_factor:
-        speed.data = previous_speed - acceleration_factor
+    '''
+    if speed.data >= previous_speed + speed_delta:
+        speed.data = previous_speed + speed_delta
+    elif speed.data <= previous_speed - speed_delta:
+        speed.data = previous_speed - speed_delta
 
     if speed.data > max_speed:
         speed.data = max_speed
     elif speed.data < min_speed:
         speed.data = min_speed
 
-    speed.data     = speed_dir * speed.data
     previous_speed = speed.data
+
+    if abs(speed.data) < speed_delta:
+        speed.data     = 0.0
+        previous_speed = 0.0
+    '''
 
     pub_vel_LRW.publish(speed)
     pub_vel_RRW.publish(speed)

@@ -6,19 +6,20 @@
   <arg         name           = 'car_name'
                default        = 'car_1'/>
   <arg         name           = 'x_pos'
-               default        = '2.5'/>
+               default        = '0.0'/>
   <arg         name           = 'y_pos'
-               default        = '-7.0'/>
+               default        = '0.0'/>
   <arg         name           = 'z_pos'
                default        = '0.05'/>
   <arg         name           = 'run_gazebo'
                default        = 'false'/>
   <arg         name           = 'paint'
                default        = 'Yellow'/>
+  <!--
   <arg         name           = 'remote_control'
                default        = 'false'/>
   <arg         name           = 'keyboard_control'
-               default        = 'false'/>
+               default        = 'false'/> -->
 
   <!-- run gazebo by default only once -->
   <group       if             = '$(arg run_gazebo)'>
@@ -48,11 +49,12 @@
   <!-- launch gazebo with track -->
   <include     file           = '$(find gazebo_ros)/launch/empty_world.launch'>
   <arg         name           = 'world_name'
-               value          = '$(find f1tenth-sim)/world/$(arg world_name).world'/>
+               value          = '$(find spring_2020_virtual_class)/world/$(arg world_name).world'/>
   <arg         name           = 'gui'
                value          = '$(arg gui)'/> </include> </group>
 
   <!-- check if remote control is required -->
+  <!--
   <group       if             = '$(arg remote_control)'>
   <node        name           = 'joy_plugin'
                pkg            = 'joy'
@@ -60,19 +62,26 @@
   <param       name           = 'autorepeat_rate'
                value          = '20.0'/> </node>
   <node        name           = 'remote_control'
-               pkg            = 'f1tenth-sim'
+               pkg            = 'spring_2020_virtual_class'
                type           = 'remote_control.py'
-               args           = '$(arg car_name)'/> </group>
+               args           = '$(arg car_name)'/> </group> -->
 
   <!-- check if keyboard control is required -->
+  <!--
   <group       if             = '$(arg keyboard_control)'>
   <node        name           = 'keyboard_plugin'
-               pkg            = 'f1tenth-sim'
+               pkg            = 'spring_2020_virtual_class'
                type           = 'keyboard_teleop.py'
-               args           = '$(arg car_name)'/> </group>
+               args           = '$(arg car_name)'/> </group> -->
+
+  <!-- reset racecar to pit stop -->
+  <node        name           = '$(arg car_name)_pit_stop_reset'
+               pkg            = 'spring_2020_virtual_class'
+               type           = 'set_racecar_state.py'
+               args           = '$(arg car_name)'/>
 
   <!-- spawn car using the set global parameters -->
-  <include     file           = '$(find f1tenth-sim)/config/vehicle_class.launch.xml'>
+  <include     file           = '$(find spring_2020_virtual_class)/config/vehicle_class.launch.xml'>
   <arg         name           = 'car_name'
                value          = '$(arg car_name)'/>
   <arg         name           = 'x_pos'

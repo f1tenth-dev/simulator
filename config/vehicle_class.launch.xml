@@ -6,9 +6,9 @@
   <arg         name           = 'car_name'
                default        = 'car_1'/>
   <arg         name           = 'x_pos'
-               default        = '2.5'/>
+               default        = '0.0'/>
   <arg         name           = 'y_pos'
-               default        = '-7.0'/>
+               default        = '0.0'/>
   <arg         name           = 'z_pos'
                default        = '0.05'/>
   <arg         name           = 'paint'
@@ -16,7 +16,7 @@
 
   <!-- load joint controller configurations from YAML file to parameter server -->
   <group       ns             = '$(arg car_name)'>
-  <rosparam    file           = '$(find f1tenth-sim)/config/control.yaml'
+  <rosparam    file           = '$(find spring_2020_virtual_class)/config/control.yaml'
                command        = 'load'/> </group>
 
   <!-- load unique controller parameters -->
@@ -36,7 +36,7 @@
   <!-- urdf xml robot description loaded on the Parameter Server, converting the xacro into a proper urdf file-->
   <param       name           = '$(arg car_name)/robot_description'
                command        = '$(find xacro)/xacro
-                                "$(find f1tenth-sim)/urdf/macros.xacro" robot_name:=$(arg car_name) robot_skin:=$(arg paint)'/>
+                                "$(find spring_2020_virtual_class)/urdf/macros.xacro" robot_name:=$(arg car_name) robot_skin:=$(arg paint)'/>
 
   <!-- push robot_description to factory and spawn robot in gazebo -->
   <node        name           = '$(arg car_name)_spawn_model'
@@ -69,15 +69,15 @@
   <node        name           = 'base_laser_link'
                pkg            = 'tf'
                type           = 'static_transform_publisher'
-               args           = '0.325 0.0 0.05
-                                 0.0   0.0 0.0
+               args           = '0.0 0.0 0.0
+                                 0.0 0.0 0.0
                                  $(arg car_name)_base_link
                                  $(arg car_name)_laser
                                  20'/>
 
   <!-- launch base controller -->
   <node        name           = 'control_plugin'
-               pkg            = 'f1tenth-sim'
+               pkg            = 'spring_2020_virtual_class'
                type           = 'control_plugin.py'
                args           = '$(arg car_name)'
                output         = 'screen'/> </group>

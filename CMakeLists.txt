@@ -10,6 +10,7 @@ project(f1tenth-sim)
 find_package(catkin REQUIRED COMPONENTS
   gazebo_ros
   geometry_msgs
+  ackermann_msgs
   nav_msgs
   rospy
   sensor_msgs

@@ -2,7 +2,7 @@
 <package format="2">
   <name>f1tenth-sim</name>
   <version>0.2.0</version>
-  <description>F1/10 Autonomous Racecar Simulator</description>
+  <description>UVA F1/10 Autonomous Racecar Simulator</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
@@ -57,6 +57,7 @@
   <build_depend>std_msgs</build_depend>
   <build_depend>tf</build_depend>
   <build_depend>message_generation</build_depend>
+  
   <build_export_depend>gazebo_ros</build_export_depend>
   <build_export_depend>geometry_msgs</build_export_depend>
   <build_export_depend>nav_msgs</build_export_depend>
@@ -64,6 +65,7 @@
   <build_export_depend>sensor_msgs</build_export_depend>
   <build_export_depend>std_msgs</build_export_depend>
   <build_export_depend>tf</build_export_depend>
+  
   <exec_depend>gazebo_ros</exec_depend>
   <exec_depend>geometry_msgs</exec_depend>
   <exec_depend>nav_msgs</exec_depend>

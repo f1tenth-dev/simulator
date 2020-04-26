@@ -16,7 +16,7 @@
 
   <!-- load joint controller configurations from YAML file to parameter server -->
   <group       ns             = '$(arg car_name)'>
-  <rosparam    file           = '$(find spring_2020_virtual_class)/config/control.yaml'
+  <rosparam    file           = '$(find f1tenth-sim)/config/control.yaml'
                command        = 'load'/> </group>
 
   <!-- load unique controller parameters -->
@@ -36,7 +36,7 @@
   <!-- urdf xml robot description loaded on the Parameter Server, converting the xacro into a proper urdf file-->
   <param       name           = '$(arg car_name)/robot_description'
                command        = '$(find xacro)/xacro
-                                "$(find spring_2020_virtual_class)/urdf/macros.xacro" robot_name:=$(arg car_name) robot_skin:=$(arg paint)'/>
+                                "$(find f1tenth-sim)/urdf/macros.xacro" robot_name:=$(arg car_name) robot_skin:=$(arg paint)'/>
 
   <!-- push robot_description to factory and spawn robot in gazebo -->
   <node        name           = '$(arg car_name)_spawn_model'
@@ -77,7 +77,7 @@
 
   <!-- launch base controller -->
   <node        name           = 'control_plugin'
-               pkg            = 'spring_2020_virtual_class'
+               pkg            = 'f1tenth-sim'
                type           = 'control_plugin.py'
                args           = '$(arg car_name)'
                output         = 'screen'/> </group>

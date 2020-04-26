@@ -2,11 +2,15 @@
 
 <launch>
 
+  <!-- global variables -->
+  <arg         name           = 'world_name'
+               default        = 'race_track'/>
+
   <!-- global map server -->
   <node        name           = 'global_map_server'
                pkg            = 'map_server'
                type           = 'map_server'
-               args           = '$(find spring_2020_virtual_class)/map/race_track.yaml'
+               args           = '$(find f1tenth-sim)/map/race_track.yaml'
                output         = 'screen'>
   <param       name           = 'frame_id'
                value          = 'map'/> </node>
@@ -14,7 +18,7 @@
                to             = '/map'/>
 
   <!-- spawn car_1 and launch Gazebo -->
-  <include     file           = '$(find spring_2020_virtual_class)/config/one_car.launch.xml'>
+  <include     file           = '$(find f1tenth-sim)/config/one_car.launch.xml'>
   <arg         name           = 'car_name'
                value          = 'car_1'/>
   <arg         name           = 'x_pos'
@@ -24,10 +28,13 @@
   <arg         name           = 'paint'
                value          = 'Yellow'/>
   <arg         name           = 'run_gazebo'
-               value          = 'true'/> </include>
+               value          = 'true'/>
+  <arg         name           = 'world_name'
+               value          = '$(arg world_name)'/> </include>
 
   <!-- spawn car_2 -->
-  <include     file           = '$(find spring_2020_virtual_class)/config/one_car.launch.xml'>
+  <!--
+  <include     file           = '$(find f1tenth-sim)/config/one_car.launch.xml'>
   <arg         name           = 'car_name'
                value          = 'car_2'/>
   <arg         name           = 'x_pos'
@@ -35,10 +42,11 @@
   <arg         name           = 'y_pos'
                value          = '-5.0'/>
   <arg         name           = 'paint'
-               value          = 'Blue'/> </include>
+               value          = 'Blue'/> </include> -->
 
   <!-- spawn car_3 -->
-  <include     file           = '$(find spring_2020_virtual_class)/config/one_car.launch.xml'>
+  <!--
+  <include     file           = '$(find f1tenth-sim)/config/one_car.launch.xml'>
   <arg         name           = 'car_name'
                value          = 'car_3'/>
   <arg         name           = 'x_pos'
@@ -46,10 +54,11 @@
   <arg         name           = 'y_pos'
                value          = '-5.0'/>
   <arg         name           = 'paint'
-               value          = 'Red'/> </include>
+               value          = 'Red'/> </include> -->
 
   <!-- spawn car_4 -->
-  <include     file           = '$(find spring_2020_virtual_class)/config/one_car.launch.xml'>
+  <!--
+  <include     file           = '$(find f1tenth-sim)/config/one_car.launch.xml'>
   <arg         name           = 'car_name'
                value          = 'car_4'/>
   <arg         name           = 'x_pos'
@@ -57,10 +66,11 @@
   <arg         name           = 'y_pos'
                value          = '-5.0'/>
   <arg         name           = 'paint'
-               value          = 'Orange'/> </include>
+               value          = 'Orange'/> </include> -->
 
   <!-- spawn car_5 -->
-  <include     file           = '$(find spring_2020_virtual_class)/config/one_car.launch.xml'>
+  <!--
+  <include     file           = '$(find f1tenth-sim)/config/one_car.launch.xml'>
   <arg         name           = 'car_name'
                value          = 'car_5'/>
   <arg         name           = 'x_pos'
@@ -68,10 +78,11 @@
   <arg         name           = 'y_pos'
                value          = '-5.0'/>
   <arg         name           = 'paint'
-               value          = 'Green'/> </include>
+               value          = 'Green'/> </include> -->
 
   <!-- spawn car_6 -->
-  <include     file           = '$(find spring_2020_virtual_class)/config/one_car.launch.xml'>
+  <!--
+  <include     file           = '$(find f1tenth-sim)/config/one_car.launch.xml'>
   <arg         name           = 'car_name'
                value          = 'car_6'/>
   <arg         name           = 'x_pos'
@@ -79,10 +90,11 @@
   <arg         name           = 'y_pos'
                value          = '-5.0'/>
   <arg         name           = 'paint'
-               value          = 'Purple'/> </include>
+               value          = 'Purple'/> </include> -->
 
   <!-- spawn car_7 -->
-  <include     file           = '$(find spring_2020_virtual_class)/config/one_car.launch.xml'>
+  <!--
+  <include     file           = '$(find f1tenth-sim)/config/one_car.launch.xml'>
   <arg         name           = 'car_name'
                value          = 'car_7'/>
   <arg         name           = 'x_pos'
@@ -90,10 +102,11 @@
   <arg         name           = 'y_pos'
                value          = '-5.0'/>
   <arg         name           = 'paint'
-               value          = 'Black'/> </include>
+               value          = 'Black'/> </include> -->
 
   <!-- spawn car_8 -->
-  <include     file           = '$(find spring_2020_virtual_class)/config/one_car.launch.xml'>
+  <!--
+  <include     file           = '$(find f1tenth-sim)/config/one_car.launch.xml'>
   <arg         name           = 'car_name'
                value          = 'car_8'/>
   <arg         name           = 'x_pos'
@@ -101,6 +114,6 @@
   <arg         name           = 'y_pos'
                value          = '-5.0'/>
   <arg         name           = 'paint'
-               value          = 'White'/> </include>
+               value          = 'White'/> </include> -->
 
 </launch>

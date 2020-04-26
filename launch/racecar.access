@@ -1,0 +1,35 @@
+<?xml version='1.0'?>
+
+<launch>
+
+<!-- global variables -->
+<arg           name           = 'car_name'
+               default        = 'car_1'/>
+<arg           name           = 'keyboard_teleop'
+               default        = 'true'/>
+<arg           name           = 'listen_offboard'
+               default        = 'false'/>
+
+<!-- launch rviz with mapping configuration -->
+<node          name           = 'remote_visualization'
+               pkg            = 'rviz'
+               type           = 'rviz'
+               args           = '-d $(find f1tenth-sim)/rviz/$(arg car_name).rviz'/>
+
+<group         ns             = '$(arg car_name)'>
+<!-- bring up command multiplexer -->
+<node          name           = 'keyboard_teleop'
+               pkg            = 'f1tenth-sim'
+               type           = 'keyboard_teleop.py'
+               args           = '$(arg car_name)'
+               output         = 'screen'/>
+
+<!-- bring up command multiplexer -->
+<node          name           = 'command_multiplexer'
+               pkg            = 'f1tenth-sim'
+               type           = 'command_multiplexer.py'
+               args           = '$(arg car_name)
+                                 $(arg listen_offboard)'
+               output         = 'screen'/> </group>
+
+</launch>

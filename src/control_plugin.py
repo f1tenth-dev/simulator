@@ -18,6 +18,8 @@ from nav_msgs.msg import Odometry
 # vehicle name
 
 car_name = str(sys.argv[1])
+x_offset = float(sys.argv[2])
+y_offset = float(sys.argv[3])
 
 # subscriber topics
 
@@ -98,8 +100,8 @@ def odom_callback(data):
     odom.child_frame_id       = base_frame
     odom.header.stamp         = rospy.Time.now()
     odom.pose                 = data.pose
-    odom.pose.pose.position.x = odom.pose.pose.position.x + 9.0
-    odom.pose.pose.position.y = odom.pose.pose.position.y + 5.0
+    odom.pose.pose.position.x = odom.pose.pose.position.x - x_offset
+    odom.pose.pose.position.y = odom.pose.pose.position.y - y_offset
     odom.twist = data.twist
 
     tf = TransformStamped(header         = Header(
@@ -123,8 +125,8 @@ global previous_speed
 
 previous_speed   = 0.0
 min_speed        = 0.0
-max_speed        = 80.0  # 100.0
-speed_delta      = 10.0  # 1.25
+max_speed        = 80.0 # 100.0
+speed_delta      = 5.0  # 1.25
 previous_speed   = 0.0
 
 # command callback
@@ -136,7 +138,7 @@ def command_callback(data):
     steering_angle = Float64()
     speed          = Float64()
 
-    steering_angle.data = data.steering_angle
+    steering_angle.data = data.steering_angle * 0.65
     speed.data          = data.speed * max_speed
 
     '''

@@ -256,7 +256,7 @@
     </visual>
   </link>
 
-  <joint name="$(arg robot_name)_right_steering_hinge_joint" type="continuous">
+  <joint name="$(arg robot_name)_right_steering_hinge_joint" type="revolute">
     <origin xyz="0.325 -0.1 0" rpy="0 1.5708 0" />
     <parent link="$(arg robot_name)_chassis" />
     <child link="$(arg robot_name)_right_steering_hinge" />
@@ -380,20 +380,20 @@
   <link name="$(arg robot_name)_camera_link">
     <inertial>
       <mass value="1e-5" />
-      <origin xyz="-2.5 1.5 1.75" rpy="0 .57 -0.57"/>
+      <origin xyz="-2.5 0 1.75" rpy="0 .57 0"/>
       <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
     </inertial>
   </link>
   <link name="$(arg robot_name)_right_link">
     <inertial>
       <mass value="1e-5" />
-      <origin xyz="-2.5 1.5 1.75" rpy="0 .57 -0.57"/>
+      <origin xyz="-2.5 0 1.75" rpy="0 .57 0"/>
       <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
     </inertial>
   </link>
 
   <joint name="$(arg robot_name)_left_joint" type="fixed">
-    <origin xyz="-2.5 1.5 1.75" rpy="0 .57 -0.57"/>
+    <origin xyz="-2.5 0 1.75" rpy="0 .57 0"/>
     <parent link="$(arg robot_name)_link"/>
     <child link="$(arg robot_name)_camera_link"/>
     <axis xyz="0 0 1" />
@@ -501,7 +501,7 @@
             <stddev>0.01</stddev>
           </noise>
         </ray>
-        <plugin name="gazebo_ros_hokuyo_controller" filename="libgazebo_ros_laser.so">
+        <plugin name="hokuyo_controller" filename="libgazebo_ros_laser.so">
           <topicName>/$(arg robot_name)/scan</topicName>
           <frameName>$(arg robot_name)_laser</frameName>
         </plugin>

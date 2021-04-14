@@ -87,7 +87,7 @@
         <collision name='collision'>
           <geometry>
             <box>
-              <size>28.54 22.04 0.1</size>
+              <size>125 125 0.1</size>
             </box>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -108,7 +108,7 @@
           <cast_shadows>0</cast_shadows>
           <geometry>
             <box>
-              <size>28.54 22.04 0.1</size>
+              <size>125 125 0.1</size>
             </box>
           </geometry>
           <material>
@@ -126,15 +126,15 @@
       </link>
       <pose frame=''>-0.719505 0.551979 0 0 -0 0</pose>
     </model>
-    <model name='race_track'>
-      <pose frame=''>-39.47 -22.7 0 0 -0 0</pose>
+    <model name='interlagos_track'>
+      <pose frame=''>0 0 0 0 -0 0</pose>
       <static>1</static>
       <link name='body'>
         <collision name='collision'>
           <geometry>
             <mesh>
-              <uri>model://race_track/race_track.stl</uri>
-              <scale>0.1 0.1 0.1</scale>
+              <uri>model://interlagos_track/interlagos_track.stl</uri>
+              <scale>0.4 0.4 0.2</scale>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -154,8 +154,8 @@
         <visual name='visual'>
           <geometry>
             <mesh>
-              <uri>model://race_track/race_track.stl</uri>
-              <scale>0.1 0.1 0.025</scale>
+              <uri>model://interlagos_track/interlagos_track.stl</uri>
+              <scale>0.4 0.4 0.0375</scale>
             </mesh>
           </geometry>
         </visual>
@@ -169,15 +169,15 @@
     </audio>
     <wind/>
     <state world_name='default'>
-      <sim_time>170 535000000</sim_time>
-      <real_time>72 357007893</real_time>
-      <wall_time>1584808949 743558627</wall_time>
-      <iterations>72173</iterations>
+      <sim_time>1193 782000000</sim_time>
+      <real_time>61 557850471</real_time>
+      <wall_time>1618354513 629009662</wall_time>
+      <iterations>61396</iterations>
       <model name='asphalt_plane'>
-        <pose frame=''>-0.719505 0.551979 0 0 -0 0</pose>
+        <pose frame=''>0 0 0 0 -0 0</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose frame=''>-0.719505 0.551979 0 0 -0 0</pose>
+          <pose frame=''>0 0 0 0 -0 0</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
@@ -193,11 +193,11 @@
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
       </model>
-      <model name='race_track'>
-        <pose frame=''>-28.0315 -24.6199 0 0 -0 0</pose>
+      <model name='interlagos_track'>
+        <pose frame=''>-206.696 193.336 0 0 0 -1.57079</pose>
         <scale>1 1 1</scale>
         <link name='body'>
-          <pose frame=''>-28.0315 -24.6199 0 0 -0 0</pose>
+          <pose frame=''>-206.696 193.336 0 0 0 -1.57079</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
@@ -209,7 +209,7 @@
     </state>
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose frame=''>-25.5315 -42.4719 35.3512 -0 0.687642 1.15301</pose>
+        <pose frame=''>-241.928 -6.52467 383.506 -0 0.913798 0.058154</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>

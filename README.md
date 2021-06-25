@@ -1,3 +1,17 @@
+## Simulator Paper
+
+Please cite the paper below if you use this simulator for your research:
+```
+@inproceedings{babu2020f1tenth,
+  title={f1tenth. dev-An Open-source ROS based F1/10 Autonomous Racing Simulator},
+  author={Babu, Varundev Suresh and Behl, Madhur},
+  booktitle={2020 IEEE 16th International Conference on Automation Science and Engineering (CASE)},
+  pages={1614--1620},
+  year={2020},
+  organization={IEEE}
+}
+```
+
 ## Installation and Setup
 
 The simulator has been tested on a variety of hardware configurations, and while Gazebo and ROS dependencies work with bare minimum hardware requirements, the essence of an autonomous racing simulator requires a real-time factor of at-least 0.85. For this reason, we suggest that your local machine meet the requirements stated in the following table.

@@ -113,14 +113,10 @@ def odom_callback(data):
                           rotation       = odom.pose.pose.orientation))
 
     # visualize footprint everytime odom changes
-
     footprint_visualizer()
 
     odom_pub.publish(odom)
-
-    # Disable conflicting tf
-    
-    # tf_pub.sendTransform(tf)
+    tf_pub.sendTransform(tf)
 
 # command variables
 

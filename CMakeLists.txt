@@ -16,6 +16,8 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   std_msgs
   tf
+  tf2 
+  tf2_ros
   message_generation
 )
 
@@ -118,6 +120,8 @@ catkin_package(
    sensor_msgs
    std_msgs
    tf
+   tf2
+   tf2_ros
    message_runtime
 #  DEPENDS system_lib
 )

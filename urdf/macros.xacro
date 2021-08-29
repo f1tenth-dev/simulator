@@ -152,6 +152,9 @@
       <xacro:chassis_geometry/>
       <material name="red" />
     </visual>
+    <collision>
+      <xacro:chassis_geometry />
+    </collision>
   </link>
 
   <joint name="$(arg robot_name)_base_link_joint" type="fixed">
@@ -182,7 +185,7 @@
       <xacro:left_rear_wheel_geometry />
       <material name="black" />
     </visual>
-    <collision>robot
+    <collision>
       <xacro:left_wheels_collision_geometry />
     </collision>
   </link>

@@ -3,6 +3,7 @@
 <launch>
 
   <!-- global variables -->
+  <arg name='multi' default='false' />
   <arg name='world_name' default='interlagos_track' />
 
   <!-- global map server -->
@@ -13,7 +14,7 @@
   <remap from='map' to='/map' /> -->
 
   <!-- spawn car_1 and launch Gazebo -->
-  <include file='$(find f1tenth-sim)/config/one_car.launch.xml'>
+  <include file='$(find f1tenth-sim)/launch/car_gazebo.launch'>
     <arg name='car_name' value='car_1' />
     <arg name='x_pos' value='-6.75' />
     <arg name='y_pos' value='-43.0' />
@@ -22,22 +23,22 @@
     <arg name='world_name' value='$(arg world_name)' />
   </include>
 
-  <!-- spawn car_2 -->
-  <!--
-  <include file='$(find f1tenth-sim)/config/one_car.launch.xml'>
-    <arg name='car_name' value='car_2' />
-    <arg name='x_pos' value='-7.75' />
-    <arg name='y_pos' value='-43.5' />
-    <arg name='paint' value='Green' />
-  </include> -->
+  <group if="$(arg multi)">
+    <!-- spawn car_2  -->
+    <include file='$(find f1tenth-sim)/launch/car_gazebo.launch'>
+      <arg name='car_name' value='car_2' />
+      <arg name='x_pos' value='-7.75' />
+      <arg name='y_pos' value='-43.5' />
+      <arg name='paint' value='Green' />
+    </include>
 
   <!-- spawn car_3 -->
-  <!--
-  <include file='$(find f1tenth-sim)/config/one_car.launch.xml'>
-    <arg name='car_name' value='car_3' />
-    <arg name='x_pos' value='-8.75' />
-    <arg name='y_pos' value='-44.0' />
-    <arg name='paint' value='Red' />
-  </include> -->
+    <include file='$(find f1tenth-sim)/launch/car_gazebo.launch'>
+      <arg name='car_name' value='car_3' />
+      <arg name='x_pos' value='-8.75' />
+      <arg name='y_pos' value='-44.0' />
+      <arg name='paint' value='Red' />
+    </include>
+  </group>
 
 </launch>

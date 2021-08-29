@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import rospy
 import math
@@ -117,7 +117,10 @@ def odom_callback(data):
     footprint_visualizer()
 
     odom_pub.publish(odom)
-    tf_pub.sendTransform(tf)
+
+    # Disable conflicting tf
+    
+    # tf_pub.sendTransform(tf)
 
 # command variables
 

@@ -54,7 +54,7 @@
   <node name='$(arg car_name)_pit_stop_reset' pkg='f1tenth-sim' type='set_racecar_state.py' args='$(arg car_name)' />
 
   <!-- spawn car using the set global parameters -->
-  <include file='$(find f1tenth-sim)/config/vehicle_class.launch.xml'>
+  <include file='$(find f1tenth-sim)/launch/car_spawner.launch'>
     <arg name='car_name' value='$(arg car_name)' />
     <arg name='x_pos' value='$(arg x_pos)' />
     <arg name='y_pos' value='$(arg y_pos)' />

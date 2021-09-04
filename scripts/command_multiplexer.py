@@ -11,7 +11,7 @@ global offboard_command
 
 car_name              = str(sys.argv[1])
 listen_offboard       = str(sys.argv[2])
-joy_control           = str(sys.argv[3])
+keyboard_control      = str(sys.argv[3])
 joy_angle_axis        = 2
 joy_angle_scaler      = 1.0
 joy_speed_axis        = 1
@@ -99,10 +99,10 @@ if __name__ == '__main__':
         rospy.init_node('command_multiplexer', anonymous = True)
         if listen_offboard == 'true':
             rospy.Subscriber('/{}/offboard/command'.format(car_name), AckermannDrive, offboard_callback)
-        if joy_control == 'true':
-            rospy.Subscriber('/{}/teleop/command'.format(car_name), AckermannDrive, joy_command_callback)
-        else:
+        if keyboard_control == 'true':
             rospy.Subscriber('/{}/teleop/command'.format(car_name), AckermannDrive, keyboard_command_callback)
+        else:
+            rospy.Subscriber('/{}/teleop/command'.format(car_name), AckermannDrive, joy_command_callback)
         rospy.spin()
     except rospy.ROSInterruptException:
         pass

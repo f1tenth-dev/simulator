@@ -1,8 +1,9 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import rospy
 import math
 import sys
+import ast
 import tf2_ros
 
 from std_msgs.msg import Header
@@ -18,8 +19,6 @@ from nav_msgs.msg import Odometry
 # vehicle name
 
 car_name = str(sys.argv[1])
-x_offset = float(sys.argv[2])
-y_offset = float(sys.argv[3])
 
 # subscriber topics
 
@@ -42,8 +41,13 @@ RSH_topic   = '/{}/right_steering_hinge_position_controller/command'.format(car_
 
 # frame names
 
-odom_frame = 'odom'
+odom_frame = '{}_odom'.format(car_name)
 base_frame = '{}_base_link'.format(car_name)
+
+# Get car init pose as offset
+init_pose = Point32()
+init_pose_param = ast.literal_eval(rospy.get_param('/{}/init_pose'.format(car_name)))
+init_pose.x, init_pose.y, init_pose.z = init_pose_param
 
 # information publishers
 
@@ -100,8 +104,8 @@ def odom_callback(data):
     odom.child_frame_id       = base_frame
     odom.header.stamp         = rospy.Time.now()
     odom.pose                 = data.pose
-    odom.pose.pose.position.x = odom.pose.pose.position.x - x_offset
-    odom.pose.pose.position.y = odom.pose.pose.position.y - y_offset
+    odom.pose.pose.position.x = odom.pose.pose.position.x - init_pose.x
+    odom.pose.pose.position.y = odom.pose.pose.position.y - init_pose.y
     odom.twist = data.twist
 
     tf = TransformStamped(header         = Header(
@@ -113,7 +117,6 @@ def odom_callback(data):
                           rotation       = odom.pose.pose.orientation))
 
     # visualize footprint everytime odom changes
-
     footprint_visualizer()
 
     odom_pub.publish(odom)
@@ -128,6 +131,7 @@ min_speed        = 0.0
 max_speed        = 80.0 # 100.0
 speed_delta      = 5.0  # 1.25
 previous_speed   = 0.0
+wheelRaidus = 0.05 # from wheel collision property
 
 # command callback
 
@@ -138,8 +142,10 @@ def command_callback(data):
     steering_angle = Float64()
     speed          = Float64()
 
-    steering_angle.data = data.steering_angle * 0.65
-    speed.data          = data.speed * max_speed
+    steering_angle.data = data.steering_angle
+    
+    # convert local frame (m/s) to joint speed (radian/s)
+    speed.data          = data.speed / wheelRaidus
 
     '''
     if speed.data >= previous_speed + speed_delta:

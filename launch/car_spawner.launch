@@ -22,9 +22,18 @@
   <param name='/$(arg car_name)/left_steering_hinge_position_controller/joint' value='$(arg car_name)_left_steering_hinge_joint' />
   <param name='/$(arg car_name)/right_steering_hinge_position_controller/joint' value='$(arg car_name)_right_steering_hinge_joint' />
 
+  <!-- Publish spawn pose to define origin/offset  -->
+  <param name='/$(arg car_name)/init_pose' value='[$(arg x_pos), $(arg y_pos), $(arg z_pos)]'/>
+
   <!-- urdf xml robot description loaded on the Parameter Server, converting the xacro into a proper urdf file-->
   <param name='$(arg car_name)/robot_description' command='$(find xacro)/xacro
                                 "$(find f1tenth-sim)/urdf/macros.xacro" robot_name:=$(arg car_name) robot_skin:=$(arg paint)' />
+
+  <!-- Robot state publisher -->
+   <!-- <node pkg="robot_state_publisher" type="robot_state_publisher" name="$(arg car_name)_state" >
+      <remap from="robot_description" to="$(arg car_name)/robot_description" />
+      <remap from="joint_states" to="$(arg car_name)/joint_states" />
+    </node> -->
 
   <!-- push robot_description to factory and spawn robot in gazebo -->
   <node name='$(arg car_name)_spawn_model' pkg='gazebo_ros' type='spawn_model' output='screen' args='-urdf -param $(arg car_name)/robot_description
@@ -41,14 +50,14 @@
 
   <group ns='$(arg car_name)'>
     <!-- static base_laser_link -->
-    <node name='base_laser_link' pkg='tf' type='static_transform_publisher' args='0.0 0.0 0.0
+    <node name='base_laser_link' pkg='tf' type='static_transform_publisher' args='0.125 0.0 0.160
                                  0.0 0.0 0.0
                                  $(arg car_name)_base_link
                                  $(arg car_name)_laser
                                  20' />
 
     <!-- launch base controller -->
-    <node name='control_plugin' pkg='f1tenth-sim' type='control_plugin.py' args='$(arg car_name) $(arg x_pos) $(arg y_pos)' output='screen' />
+    <node name='control_plugin' pkg='f1tenth-sim' type='control_plugin.py' args='$(arg car_name)' output='screen' />
   </group>
 
 </launch>

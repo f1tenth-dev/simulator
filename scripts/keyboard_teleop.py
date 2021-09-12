@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import rospy
 import sys
@@ -14,7 +14,7 @@ keyBindings = {'w':(1.0,  0.0),  # move forward
                's':(-1.0, 0.0), # move reverse
                'q':(0.0,  0.0)}  # all stop
 
-speed_limit = 0.250
+speed_limit = 1.25
 angle_limit = 0.325
 
 def getKey():

@@ -12,6 +12,16 @@
   <arg name='remote_control' default='false' />
   <arg name='keyboard_control' default='false' />
   <arg name='world_name' default='bahrain_track' />
+  <arg name='mapping_tf' default='false' />
+
+  <!-- launch map to odom tf -->
+  <group unless='$(arg mapping_tf)'>
+    <node name='map_$(arg car_name)_odom_link' pkg='tf' type='static_transform_publisher' args='$(arg x_pos) $(arg y_pos) 0.0
+                                  0.0 0.0 0.0
+                                  map
+                                  $(arg car_name)_odom
+                                  100' />
+  </group>
 
   <!-- run gazebo by default only once -->
   <group if='$(arg run_gazebo)'>
@@ -22,13 +32,6 @@
     <!-- simulator arguments -->
     <arg name='gui' default='true' />
     <arg name='run_camera' default='false' />
-
-    <!-- launch map to  odom tf -->
-    <node name='map_odom_link' pkg='tf' type='static_transform_publisher' args='0.0 0.0 0.0
-                                 0.0 0.0 0.0
-                                 map
-                                 odom
-                                 100' />
 
     <!-- launch gazebo with track -->
     <include file='$(find gazebo_ros)/launch/empty_world.launch'>
@@ -54,7 +57,7 @@
   <node name='$(arg car_name)_pit_stop_reset' pkg='f1tenth-sim' type='set_racecar_state.py' args='$(arg car_name)' />
 
   <!-- spawn car using the set global parameters -->
-  <include file='$(find f1tenth-sim)/config/vehicle_class.launch.xml'>
+  <include file='$(find f1tenth-sim)/launch/car_spawner.launch'>
     <arg name='car_name' value='$(arg car_name)' />
     <arg name='x_pos' value='$(arg x_pos)' />
     <arg name='y_pos' value='$(arg y_pos)' />

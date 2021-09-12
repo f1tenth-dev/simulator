@@ -3,8 +3,9 @@
 <launch>
 
   <!-- global variables -->
-  <arg name='multi' default='false' />
+  <arg name='multi_car' default='false' />
   <arg name='world_name' default='silverstone_track' />
+  <arg name='mapping_tf' default='false' />
 
   <!-- global map server -->
   <!--
@@ -21,9 +22,10 @@
     <arg name='paint' value='Yellow' />
     <arg name='run_gazebo' value='true' />
     <arg name='world_name' value='$(arg world_name)' />
+    <arg name='mapping_tf' value='$(arg mapping_tf)' />
   </include>
 
-  <group if="$(arg multi)">
+  <group if="$(arg multi_car)">
     <!-- spawn car_2 -->
     <include file='$(find f1tenth-sim)/launch/car_gazebo.launch'>
       <arg name='car_name' value='car_2' />

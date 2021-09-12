@@ -326,13 +326,13 @@
       <xacro:hokuyo_inertial_params />
     </inertial>
     <collision>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <origin xyz="0 0 -0.018" rpy="0 0 0"/>
       <geometry>
         <box size="0.1 0.1 0.1"/>
       </geometry>
     </collision>
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <origin xyz="0 0 -0.018" rpy="0 0 0"/>
       <geometry>
         <mesh filename="package://f1tenth-sim/urdf/meshes/hokuyo.stl"/>
         <material name="grey" />
@@ -341,7 +341,7 @@
   </link>
 
   <joint name="$(arg robot_name)_hokuyo_joint" type="fixed">
-    <origin xyz="0.125 0.0 0.155" rpy="0 0 0"/>
+    <origin xyz="0.125 0.0 0.173" rpy="0 0 0"/>
     <parent link="$(arg robot_name)_chassis" />
     <child link="$(arg robot_name)_laser" />
     <axis xyz="0 0 1" />
@@ -477,12 +477,12 @@
     </plugin>
   </gazebo>
 
-    <!-- hokuyo -->
+  <!-- hokuyo -->
   <xacro:unless value="$(optenv DISABLE_GAZEBO_LASER false)">
     <gazebo reference="$(arg robot_name)_laser">
       <material>Gazebo/Grey</material>
       <sensor type="ray" name="$(arg robot_name)_hokuyo_sensor">
-        <pose>0 0 0.0124 0 0 0</pose>
+        <pose>0 0 0 0 0 0</pose>
         <visualize>false</visualize>
         <update_rate>40</update_rate>
         <ray>

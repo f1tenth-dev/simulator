@@ -102,7 +102,7 @@ if __name__ == '__main__':
         if keyboard_control == 'true':
             rospy.Subscriber('/{}/teleop/command'.format(car_name), AckermannDrive, keyboard_command_callback)
         else:
-            rospy.Subscriber('/{}/teleop/command'.format(car_name), AckermannDrive, joy_command_callback)
+            rospy.Subscriber('/{}/teleop/command'.format(car_name), Joy, joy_command_callback)
         rospy.spin()
     except rospy.ROSInterruptException:
         pass

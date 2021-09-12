@@ -22,6 +22,9 @@
   <param name='/$(arg car_name)/left_steering_hinge_position_controller/joint' value='$(arg car_name)_left_steering_hinge_joint' />
   <param name='/$(arg car_name)/right_steering_hinge_position_controller/joint' value='$(arg car_name)_right_steering_hinge_joint' />
 
+  <!-- Publish spawn pose to define origin/offset  -->
+  <param name='/$(arg car_name)/init_pose' value='[$(arg x_pos), $(arg y_pos), $(arg z_pos)]'/>
+
   <!-- urdf xml robot description loaded on the Parameter Server, converting the xacro into a proper urdf file-->
   <param name='$(arg car_name)/robot_description' command='$(find xacro)/xacro
                                 "$(find f1tenth-sim)/urdf/macros.xacro" robot_name:=$(arg car_name) robot_skin:=$(arg paint)' />
@@ -48,7 +51,7 @@
                                  20' />
 
     <!-- launch base controller -->
-    <node name='control_plugin' pkg='f1tenth-sim' type='control_plugin.py' args='$(arg car_name) $(arg x_pos) $(arg y_pos)' output='screen' />
+    <node name='control_plugin' pkg='f1tenth-sim' type='control_plugin.py' args='$(arg car_name)' output='screen' />
   </group>
 
 </launch>

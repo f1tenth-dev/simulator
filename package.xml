@@ -58,6 +58,7 @@
   <build_depend>tf</build_depend>
   <build_depend>tf2</build_depend>
   <build_depend>tf2_ros</build_depend>
+  <build_depend>std_srvs</build_depend>
 
   <build_depend>message_generation</build_depend>
   
@@ -79,6 +80,7 @@
   <exec_depend>tf2</exec_depend>
   <exec_depend>tf2_ros</exec_depend>
   <exec_depend>message_runtime</exec_depend>
+  <exec_depend>std_srvs</exec_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
